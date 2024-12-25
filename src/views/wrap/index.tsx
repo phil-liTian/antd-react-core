@@ -1,9 +1,9 @@
-import Button from "../componentsDemo/ButtonView"
-
-
+import ButtonView from "../componentsDemo/ButtonView"
+import AlertView from "../componentsDemo/AlertView"
 function ReactComponentWrap() {
   return <div>
-    <Button />
+    <AlertView />
+    {/* <ButtonView /> */}
   </div>
 }
 
