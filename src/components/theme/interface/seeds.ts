@@ -6,6 +6,8 @@ export interface SeedToken extends PresetColorType {
 	colorWarning: string;
 	colorError: string;
 	colorInfo: string;
+	colorBgBase: string;
+	colorTextBase: string;
 
 	lineWidth: number;
 	lineType: string;
@@ -16,4 +18,7 @@ export interface SeedToken extends PresetColorType {
 	// size
 	sizeUnit: number;
 	sizeStep: number;
+
+	// fontSize
+	fontSize: number;
 }

@@ -26,8 +26,7 @@ const genAlertTypeStyle = (
 };
 
 export const genBaseStyle = (token: any) => {
-	const { componentCls, defaultPadding } = token;
-	console.log('token', token);
+	const { componentCls, defaultPadding, fontSize, lineHeight } = token;
 
 	return {
 		[componentCls]: {
@@ -35,11 +34,34 @@ export const genBaseStyle = (token: any) => {
 			alignItems: 'center',
 			padding: defaultPadding,
 
+			[`&-content`]: {
+				flex: 1,
+			},
+
+			[`&-description`]: {
+				fontSize,
+				lineHeight,
+			},
+
 			'&-icon': {
 				marginRight: '4px',
 			},
 
 			'&-message': {},
+		},
+	};
+};
+
+export const genActionStyle = (token: any) => {
+	const { componentCls } = token;
+	return {
+		[componentCls]: {
+			'&-close-icon': {
+				background: 'transparent',
+				border: 'none',
+				outline: 'none',
+				cursor: 'pointer',
+			},
 		},
 	};
 };
@@ -60,6 +82,13 @@ const genTypeStyle = (token) => {
 		colorInfoBg,
 		colorInfo,
 		colorInfoBorder,
+		colorWarning,
+		colorWarningBg,
+		colorWarningBorder,
+
+		colorErrorBg,
+		colorErrorBorder,
+		colorError
 	} = token;
 	return {
 		[componentCls]: {
@@ -78,6 +107,22 @@ const genTypeStyle = (token) => {
 				token,
 				componentCls
 			),
+
+			'&-warning': genAlertTypeStyle(
+				colorWarningBg,
+				colorWarningBorder,
+				colorWarning,
+				token,
+				componentCls
+			),
+
+			'&-error': genAlertTypeStyle(
+				colorErrorBg,
+				colorErrorBorder,
+				colorError,
+				token,
+				componentCls
+			),
 		},
 	};
 };
@@ -85,9 +130,7 @@ const genTypeStyle = (token) => {
 export default genStyleHooks(
 	'Alert',
 	(token) => {
-		console.log('token', token);
-
-		return [genBaseStyle(token), genTypeStyle(token)];
+		return [genBaseStyle(token), genTypeStyle(token), genActionStyle(token)];
 	},
 	prepareComponentToken
 );

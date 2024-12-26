@@ -1,14 +1,15 @@
 import React from 'react'
+import { Button } from '@c/index'
 
 const Basic: React.FC = () => {
-  return <div>basic</div>
+  return <Button>default</Button>
 }
 
 
-const Button: React.FC = () => {
+const ButtonView: React.FC = () => {
   return <>
     <Basic />
   </>
 }
 
-export default Button
+export default ButtonView

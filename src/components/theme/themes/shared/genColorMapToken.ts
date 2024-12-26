@@ -2,7 +2,7 @@ import { SeedToken } from '../../interface';
 
 export const genColorMapToken = (
 	seed: SeedToken,
-	{ generateColorPalettes }
+	{ generateColorPalettes, generateNeutralColorPalettes }
 ) => {
 	const {
 		colorSuccess: colorSuccessBase,
@@ -10,6 +10,8 @@ export const genColorMapToken = (
 		colorError: colorErrorBase,
 		colorInfo: colorInfoBase,
 		colorPrimary: colorPrimaryBase,
+		colorBgBase,
+		colorTextBase,
 	} = seed;
 
 	const primaryColors = generateColorPalettes(colorPrimaryBase);
@@ -18,7 +20,14 @@ export const genColorMapToken = (
 	const errorColors = generateColorPalettes(colorErrorBase);
 	const infoColors = generateColorPalettes(colorInfoBase);
 
+	const neutralColors = generateNeutralColorPalettes(
+		colorBgBase,
+		colorTextBase
+	);
+
 	return {
+		...neutralColors,
+
 		// success
 		colorSuccessBg: successColors[1],
 		colorSuccessBgHover: successColors[2],

@@ -1,7 +1,8 @@
 import { SeedToken } from '../../interface';
 import { genColorMapToken } from '../shared/genColorMapToken';
 import genSizeMapToken from '../shared/genSizeMapToken';
-import { generateColorPalettes } from './colors';
+import genFontMapToken from '../shared/genFontMapToken';
+import { generateColorPalettes, generateNeutralColorPalettes } from './colors';
 
 export default function derivative(token: SeedToken) {
 	return {
@@ -9,9 +10,13 @@ export default function derivative(token: SeedToken) {
 		// colors
 		...genColorMapToken(token, {
 			generateColorPalettes,
+			generateNeutralColorPalettes,
 		}),
 
 		// size
 		...genSizeMapToken(token),
+
+		// font & lineHeight
+		...genFontMapToken(token.fontSize),
 	};
 }

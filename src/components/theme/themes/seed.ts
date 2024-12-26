@@ -29,6 +29,9 @@ const seedToken: SeedToken = {
 	colorError: '#ff4d4f',
 	colorInfo: '#1677ff',
 
+	colorBgBase: '',
+	colorTextBase: '',
+
 	lineWidth: 1,
 	lineType: 'solid',
 
@@ -37,6 +40,9 @@ const seedToken: SeedToken = {
 
 	sizeUnit: 4,
 	sizeStep: 4,
+
+	// font
+	fontSize: 14,
 };
 
 export default seedToken;
