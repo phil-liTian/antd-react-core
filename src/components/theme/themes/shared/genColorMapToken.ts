@@ -1,9 +1,10 @@
 import { SeedToken } from '../../interface';
+import { ColorMapToken } from '../../interface/map/colors';
 
 export const genColorMapToken = (
 	seed: SeedToken,
 	{ generateColorPalettes, generateNeutralColorPalettes }
-) => {
+): ColorMapToken => {
 	const {
 		colorSuccess: colorSuccessBase,
 		colorWarning: colorWarningBase,
@@ -88,5 +89,9 @@ export const genColorMapToken = (
 		colorWarningTextHover: warningColors[8],
 		colorWarningText: warningColors[9],
 		colorWarningTextActive: warningColors[10],
+
+
+
+		colorWhite: '#fff',
 	};
 };

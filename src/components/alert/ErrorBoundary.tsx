@@ -36,7 +36,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     const errorDescription = typeof description === 'undefined' ? componentStack : description
 
     if (error) {
-      return <Alert message={errorMessage} type='error' description={<pre style={{ fontSize: '0.9em', overflowX: 'auto' }}>{errorDescription}</pre>} />
+      return <Alert
+        message={errorMessage}
+        type='error'
+        description={<pre style={{ fontSize: '0.9em', overflowX: 'auto' }}>
+          {errorDescription}
+        </pre>}
+      />
     }
 
     return children

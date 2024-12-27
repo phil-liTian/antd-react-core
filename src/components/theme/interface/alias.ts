@@ -7,4 +7,12 @@ export interface AliasToken extends MapToken {
 	marginXXS: number;
 	marginSM: number;
 	margin: number;
+
+	colorTextLightSolid: string;
+
+	paddingContentHorizontal: number;
+
+	fontSizeIcon: number;
+
+	colorTextHeading: string;
 }

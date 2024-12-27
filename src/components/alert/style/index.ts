@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react';
 import { genStyleHooks } from '../../theme/internal';
 import { FullToken } from '@/components/theme/interface/cssinjs-utils';
+import { resetComponent } from '@/components/style';
 
 export interface ComponentToken {
 	defaultPadding: CSSProperties['padding'];
@@ -26,13 +27,26 @@ const genAlertTypeStyle = (
 };
 
 export const genBaseStyle = (token: any) => {
-	const { componentCls, defaultPadding, fontSize, lineHeight } = token;
+	const {
+		componentCls,
+		defaultPadding,
+		fontSize,
+		lineHeight,
+		colorTextHeading,
+		marginXS,
+		borderRadius,
+		motionEaseInOutCirc,
+		motionDurationSlow: duration,
+	} = token;
+	// const duration = '100s';
 
 	return {
 		[componentCls]: {
+			...resetComponent(token),
 			display: 'flex',
 			alignItems: 'center',
 			padding: defaultPadding,
+			borderRadius,
 
 			[`&-content`]: {
 				flex: 1,
@@ -44,16 +58,35 @@ export const genBaseStyle = (token: any) => {
 			},
 
 			'&-icon': {
-				marginRight: '4px',
+				marginRight: marginXS,
 			},
 
-			'&-message': {},
+			'&-message': {
+				marginBottom: marginXS,
+				color: colorTextHeading,
+			},
+
+			[`&${componentCls}-motion-leave`]: {
+				overflow: 'hidden',
+				opacity: 1,
+				transition: `max-height ${duration} ${motionEaseInOutCirc}, opacity ${duration} ${motionEaseInOutCirc},
+        padding-top ${duration} ${motionEaseInOutCirc}, padding-bottom ${duration} ${motionEaseInOutCirc},
+        margin-bottom ${duration} ${motionEaseInOutCirc}`,
+			},
+
+			[`&${componentCls}-motion-leave-active`]: {
+				maxHeight: 0,
+				marginBottom: '0 !important',
+				paddingTop: 0,
+				paddingBottom: 0,
+				opacity: 0,
+			},
 		},
 	};
 };
 
 export const genActionStyle = (token: any) => {
-	const { componentCls } = token;
+	const { componentCls, fontSizeIcon } = token;
 	return {
 		[componentCls]: {
 			'&-close-icon': {
@@ -61,6 +94,9 @@ export const genActionStyle = (token: any) => {
 				border: 'none',
 				outline: 'none',
 				cursor: 'pointer',
+				fontSize: fontSizeIcon,
+				lineHeight: `${fontSizeIcon}px`,
+				backgroundColor: 'transparent',
 			},
 		},
 	};
@@ -88,7 +124,7 @@ const genTypeStyle = (token) => {
 
 		colorErrorBg,
 		colorErrorBorder,
-		colorError
+		colorError,
 	} = token;
 	return {
 		[componentCls]: {

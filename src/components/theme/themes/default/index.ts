@@ -3,6 +3,7 @@ import { genColorMapToken } from '../shared/genColorMapToken';
 import genSizeMapToken from '../shared/genSizeMapToken';
 import genFontMapToken from '../shared/genFontMapToken';
 import { generateColorPalettes, generateNeutralColorPalettes } from './colors';
+import genCommonMapToken from '../shared/genCommonMapToken';
 
 export default function derivative(token: SeedToken) {
 	return {
@@ -18,5 +19,8 @@ export default function derivative(token: SeedToken) {
 
 		// font & lineHeight
 		...genFontMapToken(token.fontSize),
+
+		// common
+		...genCommonMapToken(token),
 	};
 }

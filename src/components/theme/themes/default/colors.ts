@@ -22,9 +22,11 @@ export const generateNeutralColorPalettes = (
 	bgBaseColor: string,
 	textBaseColor: string
 ) => {
-	const colorBgBase = bgBaseColor || '#000';
-	const colorTextBase = textBaseColor || '#fff';
+	// const colorBgBase = bgBaseColor || '#000';
+	// const colorTextBase = textBaseColor || '#fff';
 
+	const colorBgBase = bgBaseColor || '#fff';
+	const colorTextBase = textBaseColor || '#000';
 	return {
 		colorBgBase,
 		colorTextBase,
