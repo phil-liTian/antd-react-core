@@ -1,4 +1,4 @@
-import { ConfigContext } from './context'
+import { ConfigContext, defaultPrefixCls } from './context'
 
 
-export { ConfigContext }
+export { ConfigContext, defaultPrefixCls }

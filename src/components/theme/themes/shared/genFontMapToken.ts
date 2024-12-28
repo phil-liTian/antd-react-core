@@ -16,5 +16,9 @@ export default function genFontMapToken(fontSize: number) {
 	return {
 		fontSizeSM,
 		fontSize: fontSizeMD,
+		fontSizeLG,
+		lineHeight,
+		lineHeightSM,
+		lineHeightLG,
 	};
 }

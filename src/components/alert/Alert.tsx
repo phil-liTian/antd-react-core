@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import classNames from "classnames";
 import { InfoCircleFilled, CloseOutlined, CheckCircleFilled, CloseCircleFilled, ExclamationCircleFilled } from '@ant-design/icons'
 import CSSMotion from 'rc-motion'
-import { composeRef } from 'rc-util'
+import { composeRef } from 'vc-util'
 import { ConfigContext } from '../config-provider/index'
 import useStyle from './style/index'
 

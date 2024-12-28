@@ -1,8 +1,6 @@
 import { MapToken } from '.';
 
 export interface AliasToken extends MapToken {
-	paddingContentVerticalSM: number;
-
 	marginXS: number;
 	marginXXS: number;
 	marginSM: number;
@@ -11,6 +9,11 @@ export interface AliasToken extends MapToken {
 	colorTextLightSolid: string;
 
 	paddingContentHorizontal: number;
+	paddingContentHorizontalSM: number;
+	paddingContentHorizontalLG: number;
+	paddingContentVerticalLG: number;
+	paddingContentVertical: number;
+	paddingContentVerticalSM: number;
 
 	fontSizeIcon: number;
 

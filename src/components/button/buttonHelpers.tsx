@@ -16,3 +16,8 @@ export type ButtonColorType = (typeof _ButtonColorTypes)[number];
 
 const _ButtonTypes = ['default', 'primary', 'dashed', 'link', 'text'] as const;
 export type ButtonType = (typeof _ButtonTypes)[number];
+
+
+export function isUnBorderedButtonVariant(type?: ButtonVariantType) {
+  return type === 'link' || type === 'text';
+}

@@ -1,12 +1,13 @@
 import React from "react";
-import { composeRef } from 'rc-util'
+import { composeRef } from 'vc-util'
 import { ConfigContext } from "../config-provider";
 import classNames from "classnames";
 import useStyle from './style'
-import { ButtonColorType, ButtonType, ButtonVariantType } from "./buttonHelpers";
+import { ButtonColorType, ButtonType, ButtonVariantType, isUnBorderedButtonVariant } from "./buttonHelpers";
 import { SizeType } from "./SizeContext";
 import { LoadingIcon } from "./LoadingIcon";
 import Group, { GroupSizeContext } from './button-group'
+import Wave from "../_util/wave";
 
 type MergedHTMLAttributes = Omit<React.ButtonHTMLAttributes<HTMLElement>, 'type' | 'color'>
 
@@ -33,12 +34,13 @@ const ButtonTypeMap: Record<ButtonType, ColorVariantPairType> = {
   text: ['default', 'text'],
 }
 
+
+
 const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { prefixCls: customizePrefixCls, children, variant, color, type, size: customizeSize } = props
 
   const { getPrefixCls } = React.useContext(ConfigContext)
   const groupSize = React.useContext(GroupSizeContext)
-  console.log('groupSize', groupSize);
 
   const sizeClassNameMap = { large: 'lg', small: 'sm', middle: undefined };
 
@@ -54,7 +56,7 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
   const iconNode = <LoadingIcon prefixCls={prefixCls} />
 
-  const [mergedColor, mergedVariant] = React.useMemo(() => {
+  const [mergedColor, mergedVariant] = React.useMemo<ColorVariantPairType>(() => {
     if (color && variant) {
       return [color, variant]
     }
@@ -82,6 +84,10 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {iconNode}
     {kids}
   </button>
+
+  if (!isUnBorderedButtonVariant(mergedVariant)) {
+    buttonNode = <Wave component="Button">{buttonNode}</Wave>
+  }
 
   return WrapCSSVar(buttonNode)
 })

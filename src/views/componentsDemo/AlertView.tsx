@@ -1,5 +1,5 @@
 import { AlertRef } from '@/components/alert/Alert';
-import { Alert } from '@c/index'
+import { PAlert } from '@c/index'
 import React from 'react'
 import Marquee from 'react-fast-marquee'
 
@@ -40,20 +40,20 @@ const App: React.FC = () => {
   }
 
   return <>
-    <Alert.ErrorBoundary>
+    <PAlert.ErrorBoundary>
       {/* <ThrowError /> */}
-      <Alert showIcon ref={alertRef} message='Success Text' type='success' description='123' onClose={handleClose} closable />
+      <PAlert showIcon ref={alertRef} message='Success Text' type='success' description='123' onClose={handleClose} closable />
 
-      <Alert style={{ margin: '10px 0' }} showIcon message='Success Text' type='error' onClose={handleClose} />
+      <PAlert style={{ margin: '10px 0' }} showIcon message='Success Text' type='error' onClose={handleClose} />
 
-      <Alert showIcon message='Success Text' type='info' onClose={handleClose} />
+      <PAlert showIcon message='Success Text' type='info' onClose={handleClose} />
 
-      <Alert showIcon style={{ margin: '10px 0' }} message='Success Text' type='warning' onClose={handleClose} />
-      {/* <Alert message='Success Text' type='info' /> */}
+      <PAlert showIcon style={{ margin: '10px 0' }} message='Success Text' type='warning' onClose={handleClose} />
+      {/* <PAlert message='Success Text' type='info' /> */}
 
 
-      <Alert type='success' showIcon message={<Marquee pauseOnHover gradient={false}>I can be a React component, multiple React components, or just some text.</Marquee>} />
-    </Alert.ErrorBoundary>
+      <PAlert type='success' showIcon message={<Marquee pauseOnHover gradient={false}>I can be a React component, multiple React components, or just some text.</Marquee>} />
+    </PAlert.ErrorBoundary>
   </>
 }
 

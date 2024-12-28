@@ -32,9 +32,6 @@ importers:
       rc-motion:
         specifier: ^2.9.5
         version: 2.9.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      rc-util:
-        specifier: workspace:*
-        version: link:packages/util
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -44,6 +41,9 @@ importers:
       react-fast-marquee:
         specifier: ^1.6.5
         version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vc-util:
+        specifier: workspace:*
+        version: link:packages/util
     devDependencies:
       '@eslint/js':
         specifier: ^9.15.0

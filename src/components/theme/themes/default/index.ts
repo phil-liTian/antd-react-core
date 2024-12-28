@@ -4,6 +4,7 @@ import genSizeMapToken from '../shared/genSizeMapToken';
 import genFontMapToken from '../shared/genFontMapToken';
 import { generateColorPalettes, generateNeutralColorPalettes } from './colors';
 import genCommonMapToken from '../shared/genCommonMapToken';
+import genControlHeight from '../shared/genControlHeight';
 
 export default function derivative(token: SeedToken) {
 	return {
@@ -22,5 +23,8 @@ export default function derivative(token: SeedToken) {
 
 		// common
 		...genCommonMapToken(token),
+
+		// conten
+		...genControlHeight(token),
 	};
 }

@@ -10,7 +10,12 @@ export default function formatToken(derivativeToken): AliasToken {
 		paddingContentVerticalSM: 4,
 		colorTextLightSolid: mergedToken.colorWhite,
 
+		// padding
+		paddingContentHorizontalLG: mergedToken.sizeLG,
+		paddingContentVerticalLG: mergedToken.sizeMS,
 		paddingContentHorizontal: mergedToken.sizeMS,
+		paddingContentVertical: mergedToken.sizeSM,
+		paddingContentHorizontalSM: mergedToken.size,
 
 		fontSizeIcon: mergedToken.fontSizeSM,
 		colorTextHeading: mergedToken.colorText,
