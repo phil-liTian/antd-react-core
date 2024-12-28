@@ -38,6 +38,15 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
   const { getPrefixCls } = React.useContext(ConfigContext)
   const groupSize = React.useContext(GroupSizeContext)
+  console.log('groupSize', groupSize);
+
+  const sizeClassNameMap = { large: 'lg', small: 'sm', middle: undefined };
+
+  const sizeFullName = React.useMemo(() => {
+    return customizeSize || groupSize || 'middle'
+  }, [customizeSize, groupSize])
+  const sizeCls = sizeClassNameMap[sizeFullName]
+
 
   const prefixCls = getPrefixCls('btn', customizePrefixCls)
   const [WrapCSSVar] = useStyle(prefixCls)
@@ -55,7 +64,8 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
   const classes = classNames(prefixCls, {
     [`${prefixCls}-color-${mergedType}`]: true,
-    [`${prefixCls}-variant-${mergedVariant}`]: mergedVariant
+    [`${prefixCls}-variant-${mergedVariant}`]: mergedVariant,
+    [`${prefixCls}-${sizeCls}`]: sizeCls
   });
 
   const kids = children
@@ -65,17 +75,8 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
   // =========================  events =============================
   const handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('e', buttonRef.current);
     props.onClick?.(e)
   }, [props.onClick])
-
-  // React.useEffect(() => {
-  //   console.log('buttonRef---->');
-  // }, [handleClick])
-
-  // e => {
-  //   console.log('e', buttonRef.current);
-  // }
 
   let buttonNode = <button ref={composeRef(buttonRef, ref)} onClick={handleClick} className={classes}>
     {iconNode}

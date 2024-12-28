@@ -1,5 +1,7 @@
 import React from 'react'
-import { Button } from '@c/index'
+import { PButton } from '@c/index'
+import { Button } from 'antd'
+
 const TestCallBack: React.FC = () => {
   const [count, setCount] = React.useState(0)
   const onClick = () => {
@@ -13,7 +15,6 @@ const TestCallBack: React.FC = () => {
 }
 
 const Basic: React.FC = () => {
-
   return <Button type='primary'>primary button</Button>
 }
 
@@ -22,7 +23,6 @@ const ButtonGroup: React.FC = () => {
     <Button type='primary'>s1231</Button>
   </Button.Group>
 }
-
 
 const ButtonView: React.FC = () => {
   return <>

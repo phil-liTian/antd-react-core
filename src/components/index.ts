@@ -1,2 +1,2 @@
-export { default as Alert } from './alert'
-export { default as Button } from './button'
+export { default as PAlert } from './alert';
+export { default as PButton } from './button';
