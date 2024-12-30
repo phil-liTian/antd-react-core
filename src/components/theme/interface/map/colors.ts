@@ -1,3 +1,7 @@
 export interface ColorMapToken {
-  colorWhite: string
+	colorWhite: string;
+}
+
+export interface ColorNeutralMapToken {
+	colorBgContainer: string;
 }

@@ -18,4 +18,8 @@ export interface AliasToken extends MapToken {
 	fontSizeIcon: number;
 
 	colorTextHeading: string;
+
+	padding: number;
+
+	colorFillAlter: string;
 }

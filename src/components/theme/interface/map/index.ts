@@ -1,5 +1,5 @@
 import { SeedToken } from '../seeds';
-import { ColorMapToken } from './colors';
+import { ColorMapToken, ColorNeutralMapToken } from './colors';
 import { FontMapToken } from './font';
 import { SizeMapToken } from './size';
 
@@ -14,4 +14,5 @@ export interface MapToken
 		SizeMapToken,
 		ColorMapToken,
 		FontMapToken,
-		CommonMapToken {}
+		CommonMapToken,
+		ColorNeutralMapToken {}

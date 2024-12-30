@@ -28,6 +28,17 @@ export default function formatToken(derivativeToken): AliasToken {
 		marginLG: mergedToken.sizeLG,
 		marginXL: mergedToken.sizeXL,
 		marginXXL: mergedToken.sizeXXL,
+
+		// padding
+		padding: mergedToken.size,
+		paddingMD: mergedToken.sizeMD,
+		paddingLG: mergedToken.sizeLG,
+		paddingXL: mergedToken.sizeXL,
+		paddingXXS: mergedToken.sizeXXS,
+		paddingXS: mergedToken.sizeXS,
+		paddingSM: mergedToken.sizeSM,
+
+		colorFillAlter: mergedToken.colorFillQuaternary,
 	};
 
 	return aliasToken;

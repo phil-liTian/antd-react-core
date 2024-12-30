@@ -1,11 +1,15 @@
 import React from 'react';
+import { RenderEmptyHandler } from './defaultRenderEmpty';
 
 export const defaultPrefixCls = 'phil';
-export const defaultIconPrefixCls = 'anticon'
+export const defaultIconPrefixCls = 'anticon';
+export type DirectionType = 'ltr' | 'rtl' | undefined;
 
 export interface ConfigConsumerProps {
 	getPrefixCls: (suffixCls?: string, customizePrefixCls?: string) => string;
-	iconPrefixCls: string
+	iconPrefixCls: string;
+	renderEmpty?: RenderEmptyHandler;
+	direction?: DirectionType;
 }
 
 const defaultGetPrefixCls = (
@@ -19,5 +23,5 @@ const defaultGetPrefixCls = (
 
 export const ConfigContext = React.createContext<ConfigConsumerProps>({
 	getPrefixCls: defaultGetPrefixCls,
-	iconPrefixCls: defaultIconPrefixCls
+	iconPrefixCls: defaultIconPrefixCls,
 });
