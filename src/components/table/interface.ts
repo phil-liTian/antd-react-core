@@ -4,7 +4,7 @@ import { PaginationProps } from '../pagination';
 import { TooltipProps } from '../tooltip';
 import { DropdownProps } from '../dropdown/dropdown';
 
-type Key = React.Key;
+export type Key = React.Key;
 
 export type SortOrder = 'descend' | 'ascend' | null;
 export type SorterTooltipProps = TooltipProps;
@@ -31,6 +31,8 @@ export interface FilterDropdownProps {
 }
 
 interface CoverableDropdownProps extends DropdownProps {}
+
+export type RowSelectionType = 'radio' | 'checkbox';
 
 export interface ColumnTitleProps<RecordType = AnyObject> {
 	sortOrder?: SortOrder;
@@ -87,3 +89,20 @@ export interface TablePaginationConfig extends PaginationProps {
 export interface TableLocale {
 	emptyText?: React.ReactNode | (() => React.ReactNode);
 }
+
+export type RowSelectMethod = 'all' | 'none' | 'invert' | 'single' | 'multiple';
+export interface TableRowSelection<T = AnyObject> {
+	type?: RowSelectionType;
+	selectedRowKeys?: Key[];
+	columnTitle?: React.ReactNode | (() => React.ReactNode)
+
+	onChange?: (
+		selectedRowKeys: Key[],
+		selectedRows: T[],
+		info?: { type: RowSelectMethod }
+	) => void;
+}
+
+export type TransformColumns<RecordType = AnyObject> = (
+	columns: ColumnsType<RecordType>
+) => ColumnsType<RecordType>;

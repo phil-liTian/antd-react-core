@@ -72,12 +72,13 @@ function App() {
           columns={columns}
           locale={{ emptyText: <Empty description="No Data">{toggleButton}</Empty> }}
         />
-
-
-        <PTable
-          columns={columns}
-          dataSource={dataSource} />
       </ConfigProvider>
+
+
+      <PTable
+        columns={columns}
+        dataSource={dataSource}
+        locale={{ emptyText: <Empty description="No Data">{toggleButton}</Empty>  }} />
     </>
   );
 }

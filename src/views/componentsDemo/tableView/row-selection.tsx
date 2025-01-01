@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Divider, Radio, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
+import { PTable } from '@c/index'
 
 interface DataType {
   key: React.Key;
@@ -73,11 +74,17 @@ const App: React.FC = () => {
         <Radio value="radio">radio</Radio>
       </Radio.Group>
       <Divider />
+
       <Table<DataType>
         rowSelection={{ type: selectionType, ...rowSelection }}
         columns={columns}
         dataSource={data}
       />
+
+      <PTable<DataType>
+        rowSelection={{ type: selectionType, ...rowSelection }}
+        columns={columns}
+        dataSource={data} />
     </div>
   );
 };

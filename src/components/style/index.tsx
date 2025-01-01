@@ -13,3 +13,11 @@ export const resetComponent = (token: AliasToken, needInheritFontFamily = false)
   // font-feature-settings: @font-feature-settings-base;
   fontFamily: needInheritFontFamily ? 'inherit' : token.fontFamily,
 });
+
+
+
+export const textEllipsis = {
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+}

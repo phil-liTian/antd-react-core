@@ -5,10 +5,14 @@ export const genBorderedStyle = (token) => {
 	return {
 		[`${componentCls}-wrapper`]: {
 			[`${componentCls}-bordered`]: {
+				[`${componentCls}-title`]: {
+					border: tableBorder,
+					borderBottom: 0,
+				},
+
 				[`${componentCls}-container`]: {
 					borderTop: tableBorder,
 					borderInlineStart: tableBorder,
-
 					[`
             > ${componentCls}-content, 
             > ${componentCls}-footer`]: {
@@ -26,6 +30,11 @@ export const genBorderedStyle = (token) => {
 							},
 						},
 					},
+				},
+
+				[`${componentCls}-footer`]: {
+					border: tableBorder,
+					borderTop: 0,
 				},
 			},
 		},

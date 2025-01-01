@@ -9,9 +9,9 @@ import { AnyObject } from '../_util/type';
 const Table = <RecordType extends AnyObject = AnyObject>(
   props: TableProps<RecordType>,
   ref: React.Ref<Reference>) => {
-  return <InternalTable {...props} ref={ref} />
+  return <InternalTable<RecordType> {...props} ref={ref} />
 }
 
 const ForwardTable = React.forwardRef(Table)
 
-export default ForwardTable
+export default ForwardTable as any

@@ -1,8 +1,9 @@
 import { AnyObject } from '@c/_util/type'
-import type { TableProps as RcTableProps, Reference as RcReference } from 'rc-table'
-import { ColumnsType, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig } from './interface'
+import { omit } from 'vc-util'
+import { TableProps as RcTableProps, Reference as RcReference, INTERNAL_HOOKS } from 'rc-table'
+import { ColumnsType, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig, TableRowSelection } from './interface'
 import RcTable from './RcTable/index'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { ConfigContext, SizeType } from '../config-provider'
 import classNames from 'classnames'
 import useStyle from './style'
@@ -11,9 +12,12 @@ import { usePagination } from './hooks/usePagination'
 import { SpinProps } from '../spin'
 import DefaultRenderEmpty from '../config-provider/defaultRenderEmpty'
 import { ConfigConsumerProps } from '../config-provider/context'
+import useSelection from './hooks/useSelection'
+
+// export type RefInternalTable = <RecordType = AnyObject>(props) => React.ReactElement
 
 export interface TableProps<RecordType = AnyObject> extends
-  Omit<RcTableProps<RecordType>, 'data' | 'columns' | 'emptyText'> {
+  Omit<RcTableProps<RecordType>, 'data' | 'columns' | 'emptyText' | 'transformColumns'> {
   prefixCls?: string
   columns?: ColumnsType<RecordType>
   dataSource?: RcTableProps['data']
@@ -33,6 +37,9 @@ export interface TableProps<RecordType = AnyObject> extends
 
   locale?: TableLocale
 
+  // rowSelction
+  rowSelection?: TableRowSelection<RecordType>,
+
   // sort
   sortDirections?: SortOrder[]
   showSortTooltip?: boolean | SorterTooltipProps
@@ -41,8 +48,8 @@ export interface TableProps<RecordType = AnyObject> extends
   virtual?: boolean
 }
 
-const InternalTable = (props: TableProps, ref: React.MutableRefObject<HTMLDivElement>) => {
-  const { prefixCls: customizePrefixCls, bordered, dataSource, pagination, loading, rootClassName } = props
+const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TableProps, ref: React.MutableRefObject<HTMLDivElement>) => {
+  const { prefixCls: customizePrefixCls, bordered, dataSource, pagination, loading, rootClassName, locale, rowSelection } = props
   const { direction, getPrefixCls, renderEmpty } = React.useContext<ConfigConsumerProps>(ConfigContext)
   const prefixCls = getPrefixCls('table', customizePrefixCls)
   const [wrapCSSVar] = useStyle(prefixCls)
@@ -68,7 +75,7 @@ const InternalTable = (props: TableProps, ref: React.MutableRefObject<HTMLDivEle
 
 
   // =========================== Empty ==============================
-  const emptyText = renderEmpty?.('Table') || <DefaultRenderEmpty componentName="Table" />
+  const emptyText = typeof locale?.emptyText !== 'undefined' ? locale?.emptyText : renderEmpty?.('Table') || <DefaultRenderEmpty componentName="Table" />
 
   // ============================= Spin ===============================
   let spinProps: SpinProps | undefined
@@ -82,6 +89,15 @@ const InternalTable = (props: TableProps, ref: React.MutableRefObject<HTMLDivEle
       spinning: !!loading,
     }
   }
+
+  // =============================== row selection ===============================
+  const [transformSelectionColumns] = useSelection({ prefixCls }, rowSelection)
+
+  // ============================== render ===============================
+  const transformColumns = useCallback(innerColumns => {
+    return transformSelectionColumns(innerColumns)
+  }, [transformSelectionColumns])
+
 
   // ============================== pagination ===============================
   const onPaginationChange = (current: number, pageSize: number) => {
@@ -126,12 +142,16 @@ const InternalTable = (props: TableProps, ref: React.MutableRefObject<HTMLDivEle
     }
   }
 
+  const tableProps: TableProps<RecordType> = omit(props, [])
+
+
   return wrapCSSVar(<div
     ref={rootRef}
     className={wrapperClassNames}>
     <Spin spinning={false} {...spinProps}>
       {topPaginationNode}
       <TableComponent
+        {...tableProps}
         ref={tblRef}
         emptyText={emptyText}
         prefixCls={prefixCls}
@@ -139,11 +159,14 @@ const InternalTable = (props: TableProps, ref: React.MutableRefObject<HTMLDivEle
           [`${prefixCls}-bordered`]: bordered
         })}
         columns={mergedColumns as RcTableProps['columns']}
-        data={pageData} />
+        data={pageData}
+        transformColumns={transformColumns as any}
+        // 加上当前参数 transformColumns才会自动执行
+        internalHooks={INTERNAL_HOOKS} />
       {bottomPaginationNode}
     </Spin>
   </div>)
 }
 
 
-export default React.forwardRef(InternalTable as any)
+export default React.forwardRef(InternalTable as any) as any

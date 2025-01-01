@@ -26,18 +26,18 @@ const options = [
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('Bordered')
+  const [curSegmented, setCurSegmented] = React.useState('RowSelection')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,
     Bordered: <Bordered />,
     Empty: <Empty />,
-    Summary: <Summary />,
+    Ellipsis: <Ellipsis />,
     RowSelection: <RowSelection />,
+    Summary: <Summary />,
     RowSelectionDebug: <RowSelectionDebug />,
     FilterSearch: <FilterSearch />,
     FilterInTree: <FilterInTree />,
-    Ellipsis: <Ellipsis />
   }
 
   return <>

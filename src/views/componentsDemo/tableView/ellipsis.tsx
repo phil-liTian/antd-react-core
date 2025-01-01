@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { TableColumnsType } from 'antd';
+import { PTable } from '@c/index'
 
 interface DataType {
   key: React.Key;
@@ -73,6 +74,9 @@ const data = [
   },
 ];
 
-const App: React.FC = () => <Table<DataType> columns={columns} dataSource={data} />;
+const App: React.FC = () => <>
+  <Table<DataType> columns={columns} dataSource={data} />
+  <PTable columns={columns} dataSource={data} />
+</>
 
 export default App;
