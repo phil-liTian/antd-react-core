@@ -10,6 +10,7 @@ import RowSelectionDebug from './tableView/row-selection-debug'
 import FilterSearch from './tableView/filter-search'
 import FilterInTree from './tableView/filter-in-tree'
 import Ellipsis from './tableView/ellipsis'
+import FixedColumns from './tableView/fixed-columns'
 
 
 const options = [
@@ -17,16 +18,17 @@ const options = [
   { label: '分页器', value: 'Pagination' },
   { label: 'Bordered', value: 'Bordered' },
   { label: 'empty', value: 'Empty' },
-  { label: 'Summary', value: 'Summary' },
   { label: 'rowSelection', value: 'RowSelection' },
   { label: 'rowSelectionDebug', value: 'RowSelectionDebug' },
-  { label: 'filterSearch', value: 'FilterSearch' },
-  { label: 'filterInTree', value: 'FilterInTree' },
   { label: 'ellipsis', value: 'Ellipsis' },
+  { label: 'Summary', value: 'Summary' },
+  { label: 'FilterSearch', value: 'FilterSearch' },
+  { label: 'FilterInTree', value: 'FilterInTree' },
+  { label: 'fixed', value: 'FixedColumns' },
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('RowSelection')
+  const [curSegmented, setCurSegmented] = React.useState('Summary')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,
@@ -38,6 +40,7 @@ const TableView: React.FC = () => {
     RowSelectionDebug: <RowSelectionDebug />,
     FilterSearch: <FilterSearch />,
     FilterInTree: <FilterInTree />,
+    FixedColumns: <FixedColumns />,
   }
 
   return <>
@@ -45,8 +48,9 @@ const TableView: React.FC = () => {
     <br />
     {curComponent[curSegmented]}
   </>
-
 }
+
+// todos: summary、fixed、filter
 
 
 export default TableView

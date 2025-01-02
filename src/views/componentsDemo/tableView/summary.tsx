@@ -88,35 +88,35 @@ const App: React.FC = () => (
       dataSource={data}
       pagination={false}
       bordered
-    // summary={pageData => {
-    //   let totalBorrow = 0;
-    //   let totalRepayment = 0;
+      summary={pageData => {
+        let totalBorrow = 0;
+        let totalRepayment = 0;
 
-    //   pageData.forEach(({ borrow, repayment }) => {
-    //     totalBorrow += borrow;
-    //     totalRepayment += repayment;
-    //   });
+        pageData.forEach(({ borrow, repayment }) => {
+          totalBorrow += borrow;
+          totalRepayment += repayment;
+        });
 
-    //   return (
-    //     <>
-    //       <Table.Summary.Row>
-    //         <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
-    //         <Table.Summary.Cell index={1}>
-    //           <Text type="danger">{totalBorrow}</Text>
-    //         </Table.Summary.Cell>
-    //         <Table.Summary.Cell index={2}>
-    //           <Text>{totalRepayment}</Text>
-    //         </Table.Summary.Cell>
-    //       </Table.Summary.Row>
-    //       <Table.Summary.Row>
-    //         <Table.Summary.Cell index={0}>Balance</Table.Summary.Cell>
-    //         <Table.Summary.Cell index={1} colSpan={2}>
-    //           <Text type="danger">{totalBorrow - totalRepayment}</Text>
-    //         </Table.Summary.Cell>
-    //       </Table.Summary.Row>
-    //     </>
-    //   );
-    // }}
+        return (
+          <>
+            <Table.Summary.Row>
+              <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+              <Table.Summary.Cell index={1}>
+                <Text type="danger">{totalBorrow}</Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={2}>
+                <Text>{totalRepayment}</Text>
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+            <Table.Summary.Row>
+              <Table.Summary.Cell index={0}>Balance</Table.Summary.Cell>
+              <Table.Summary.Cell index={1} colSpan={2}>
+                <Text type="danger">{totalBorrow - totalRepayment}</Text>
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+          </>
+        );
+      }}
     />
 
     <br />

@@ -5,6 +5,8 @@ import { PaginationProps } from '../pagination';
 import { TooltipProps } from '../tooltip';
 import { DropdownProps } from '../dropdown/dropdown';
 
+export type RefTable = <RecordType = AnyObject>(props) => React.ReactElement;
+
 export type Key = React.Key;
 
 export type SortOrder = 'descend' | 'ascend' | null;
