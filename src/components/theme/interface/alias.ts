@@ -22,4 +22,6 @@ export interface AliasToken extends MapToken {
 	padding: number;
 
 	colorFillAlter: string;
+
+	opacityLoading: number;
 }

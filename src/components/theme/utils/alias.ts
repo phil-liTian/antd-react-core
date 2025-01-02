@@ -39,6 +39,8 @@ export default function formatToken(derivativeToken): AliasToken {
 		paddingSM: mergedToken.sizeSM,
 
 		colorFillAlter: mergedToken.colorFillQuaternary,
+
+		opacityLoading: 0.65,
 	};
 
 	return aliasToken;

@@ -1,7 +1,7 @@
 import { AnyObject } from '@c/_util/type'
 import { omit } from 'vc-util'
 import { TableProps as RcTableProps, Reference as RcReference, INTERNAL_HOOKS } from 'rc-table'
-import { ColumnsType, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig, TableRowSelection } from './interface'
+import { ColumnsType, GetRowKey, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig, TableRowSelection } from './interface'
 import RcTable from './RcTable/index'
 import React, { useCallback } from 'react'
 import { ConfigContext, SizeType } from '../config-provider'
@@ -13,6 +13,7 @@ import { SpinProps } from '../spin'
 import DefaultRenderEmpty from '../config-provider/defaultRenderEmpty'
 import { ConfigConsumerProps } from '../config-provider/context'
 import useSelection from './hooks/useSelection'
+import { useLazyKVMap } from './hooks/useLazyKVMap'
 
 // export type RefInternalTable = <RecordType = AnyObject>(props) => React.ReactElement
 
@@ -46,10 +47,22 @@ export interface TableProps<RecordType = AnyObject> extends
 
   // virtual
   virtual?: boolean
+
 }
 
 const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TableProps, ref: React.MutableRefObject<HTMLDivElement>) => {
-  const { prefixCls: customizePrefixCls, bordered, dataSource, pagination, loading, rootClassName, locale, rowSelection } = props
+  const {
+    prefixCls: customizePrefixCls,
+    bordered,
+    dataSource,
+    pagination,
+    loading,
+    rootClassName,
+    locale,
+    childrenColumnName: legacyChildrenColumnName = ' children',
+    rowSelection,
+    rowKey = 'key'
+  } = props
   const { direction, getPrefixCls, renderEmpty } = React.useContext<ConfigConsumerProps>(ConfigContext)
   const prefixCls = getPrefixCls('table', customizePrefixCls)
   const [wrapCSSVar] = useStyle(prefixCls)
@@ -66,8 +79,8 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
     return props.columns
   }, [props.columns])
 
-  const pageData = React.useMemo(() => {
-    return rawData
+  const pageData = React.useMemo<RecordType[]>(() => {
+    return rawData as unknown as RecordType[]
   }, [rawData])
 
   // TODO: Filter
@@ -91,7 +104,24 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
   }
 
   // =============================== row selection ===============================
-  const [transformSelectionColumns] = useSelection({ prefixCls }, rowSelection)
+
+  const getRowKey = React.useMemo<GetRowKey<RecordType>>(() => {
+    if (typeof rowKey === 'function') {
+      return rowKey
+    }
+
+    return (record: RecordType) => record?.[rowKey as string]
+  }, [rowKey])
+
+  const [getRecordByKey ] = useLazyKVMap(rawData, legacyChildrenColumnName, getRowKey)
+
+  const [transformSelectionColumns] = useSelection({
+    prefixCls,
+    getRowKey,
+    childrenColumnName: legacyChildrenColumnName,
+    pageData,
+    getRecordByKey
+  }, rowSelection)
 
   // ============================== render ===============================
   const transformColumns = useCallback(innerColumns => {

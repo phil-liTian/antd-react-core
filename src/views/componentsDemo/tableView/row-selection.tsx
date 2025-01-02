@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Key, useState } from 'react';
 import { Divider, Radio, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import { PTable } from '@c/index'
@@ -53,19 +53,41 @@ const data: DataType[] = [
   },
 ];
 
-// rowSelection object indicates the need for row selection
-const rowSelection: TableProps<DataType>['rowSelection'] = {
-  onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record: DataType) => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
+
 
 const App: React.FC = () => {
   const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('checkbox');
+  const [selectedRowKeys, setSelections] = useState<React.Key[]>([])
+
+  // rowSelection object indicates the need for row selection
+  const rowSelection: TableProps<DataType>['rowSelection'] = {
+    selectedRowKeys,
+    onChange: setSelections,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: 'odd',
+        text: 'Select Odd Row',
+        onSelect: (changeableRowKeys: React.Key[]) => {
+
+          let newSelectedRowKeys: React.Key[] = changeableRowKeys.filter((_, index) => {
+            return index % 2 === 0;
+          });
+
+          setSelections(newSelectedRowKeys)
+        }
+      }
+    ],
+    getCheckboxProps: (record: DataType) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+    onSelect(e) {
+      console.log('e---->', e);
+    }
+  };
 
   return (
     <div>

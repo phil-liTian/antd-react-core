@@ -4,6 +4,7 @@ import { TinyColor } from '@ctrl/tinycolor';
 import { genPaginationStyle } from './pagination';
 import { genBorderedStyle } from './bordered';
 import { genEllipsisStyle } from './ellipsis';
+import { genSelectionStyle } from './selection';
 
 export interface ComponentToken {
 	headerBg: string;
@@ -11,7 +12,8 @@ export interface ComponentToken {
 	cellFontSize: number;
 	borderColor: string;
 	footerBg: string;
-	footerColor: string
+	footerColor: string;
+	headerIconColor: string;
 }
 
 export interface TableToken {
@@ -63,16 +65,17 @@ const genTableStyle = (token): CSSInterpolation => {
 					position: 'relative',
 					background: tableHeaderBg,
 
-					['&:not(:last-child)::before']: {
-						position: 'absolute',
-						content: '""',
-						width: 1,
-						top: '50%',
-						insetInlineEnd: 0,
-						transform: 'translateY(-50%)',
-						background: tableHeaderCellSplitColor,
-						height: '1.6em',
-					},
+					[`&:not(:last-child):not(${componentCls}-selection-column)::before`]:
+						{
+							position: 'absolute',
+							content: '""',
+							width: 1,
+							top: '50%',
+							insetInlineEnd: 0,
+							transform: 'translateY(-50%)',
+							background: tableHeaderCellSplitColor,
+							height: '1.6em',
+						},
 				},
 			},
 
@@ -106,11 +109,15 @@ function prepareComponentToken(token) {
 		colorBorderSecondary,
 		fontSize,
 		colorTextHeading,
+		colorIcon,
+		opacityLoading = 1,
 	} = token;
 
 	const colorFillAlterSolid = new TinyColor(colorFillAlter)
 		.onBackground(colorBgContainer)
 		.toHexShortString();
+
+	const baseColorAction = new TinyColor(colorIcon);
 
 	return {
 		cellPaddingBlock: padding,
@@ -121,6 +128,10 @@ function prepareComponentToken(token) {
 		borderColor: colorBorderSecondary,
 		footerBg: colorFillAlterSolid,
 		footerColor: colorTextHeading,
+		headerIconColor: baseColorAction
+			.clone()
+			.setAlpha(baseColorAction.getAlpha() * opacityLoading)
+			.toRgbString(),
 	};
 }
 
@@ -134,7 +145,7 @@ export default genStyleHooks(
 			headerSplitColor,
 			borderColor,
 			footerBg,
-			footerColor
+			footerColor,
 		} = token;
 
 		const tableToken = mergeToken<TableToken>(token, {
@@ -158,7 +169,10 @@ export default genStyleHooks(
 			genBorderedStyle(tableToken),
 
 			// ellipsis
-			genEllipsisStyle(tableToken)
+			genEllipsisStyle(tableToken),
+
+			//selection
+			genSelectionStyle(tableToken),
 		];
 	},
 	prepareComponentToken

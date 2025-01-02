@@ -1,4 +1,5 @@
 import React from 'react';
+import { GetRowKey } from 'rc-table/lib/interface';
 import { AnyObject } from '../_util/type';
 import { PaginationProps } from '../pagination';
 import { TooltipProps } from '../tooltip';
@@ -91,11 +92,31 @@ export interface TableLocale {
 }
 
 export type RowSelectMethod = 'all' | 'none' | 'invert' | 'single' | 'multiple';
+
+export interface SelectionItem {
+	key: string;
+	text: React.ReactNode;
+	onSelect: (changeSelectKeys: Key[]) => void;
+}
+
+export type SelectionSelectFn<T = AnyObject> = (
+	record: T,
+	selected: boolean,
+	selectedRows: T[],
+	nativeEvent: Event
+) => void;
+
 export interface TableRowSelection<T = AnyObject> {
 	type?: RowSelectionType;
 	selectedRowKeys?: Key[];
-	columnTitle?: React.ReactNode | (() => React.ReactNode)
+	defaultSelectedRowKeys?: Key[];
+	columnTitle?: React.ReactNode | (() => React.ReactNode);
+	hideSelectAll?: boolean;
+	checkStrictly?: boolean; // 父子状态下节点选择是否完全受控
+	columnWidth?: string | number;
+	selections?: true | SelectionItem[];
 
+	onSelect?: SelectionSelectFn<T>;
 	onChange?: (
 		selectedRowKeys: Key[],
 		selectedRows: T[],
@@ -106,3 +127,5 @@ export interface TableRowSelection<T = AnyObject> {
 export type TransformColumns<RecordType = AnyObject> = (
 	columns: ColumnsType<RecordType>
 ) => ColumnsType<RecordType>;
+
+export type { GetRowKey };
