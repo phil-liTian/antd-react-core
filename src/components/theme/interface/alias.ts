@@ -24,4 +24,8 @@ export interface AliasToken extends MapToken {
 	colorFillAlter: string;
 
 	opacityLoading: number;
+
+	boxShadow: string;
+	boxShadowSecondary: string;
+	boxShadowTertiary: string;
 }

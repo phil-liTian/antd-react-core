@@ -1,5 +1,6 @@
 import React from 'react';
 import { RenderEmptyHandler } from './defaultRenderEmpty';
+import { Locale } from '../locale';
 
 export const defaultPrefixCls = 'phil';
 export const defaultIconPrefixCls = 'anticon';
@@ -10,6 +11,7 @@ export interface ConfigConsumerProps {
 	iconPrefixCls: string;
 	renderEmpty?: RenderEmptyHandler;
 	direction?: DirectionType;
+	locale?: Locale;
 }
 
 const defaultGetPrefixCls = (

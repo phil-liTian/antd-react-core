@@ -7,12 +7,6 @@ export const genSelectionStyle = (token): any => {
 		calc,
 		tablePaddingHorizontal,
 	} = token;
-	console.log(
-		'iconCls',
-		iconCls,
-		fontSizeIcon,
-		calc(tablePaddingHorizontal).div(4).equal()
-	);
 
 	return {
 		[`${componentCls}-wrapper`]: {

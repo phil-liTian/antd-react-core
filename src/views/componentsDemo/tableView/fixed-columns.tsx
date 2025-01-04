@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
+import { PTable } from '@c/index'
 import type { TableColumnsType } from 'antd';
 // import { createStyles } from 'antd-style';
 // console.log('createStyles', createStyles);
@@ -83,13 +84,17 @@ const dataSource: DataType[] = [
 const App: React.FC = () => {
   // const { styles } = useStyle();
   return (
-    <Table<DataType>
-      // className={styles.customTable}
-      pagination={false}
-      columns={columns}
-      dataSource={dataSource}
-      scroll={{ x: 'max-content' }}
-    />
+    <>
+      <Table<DataType>
+        // className={styles.customTable}
+        pagination={false}
+        columns={columns}
+        dataSource={dataSource}
+        scroll={{ x: 'max-content' }}
+      />
+
+      <PTable dataSource={dataSource} columns={columns} scroll={{ x: 'max-content' }} />
+    </>
   );
 };
 

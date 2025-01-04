@@ -14,6 +14,9 @@ import DefaultRenderEmpty from '../config-provider/defaultRenderEmpty'
 import { ConfigConsumerProps } from '../config-provider/context'
 import useSelection from './hooks/useSelection'
 import { useLazyKVMap } from './hooks/useLazyKVMap'
+import { useFilter } from './hooks/useFilter'
+import defaultLocal from '../locale/zh_CN'
+import useFilterSorter from './hooks/useSorter'
 
 // export type RefInternalTable = <RecordType = AnyObject>(props) => React.ReactElement
 
@@ -63,9 +66,10 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
     rowSelection,
     rowKey = 'key'
   } = props
-  const { direction, getPrefixCls, renderEmpty } = React.useContext<ConfigConsumerProps>(ConfigContext)
+  const { direction, getPrefixCls, renderEmpty, locale: contextLocal = defaultLocal } = React.useContext<ConfigConsumerProps>(ConfigContext)
   const prefixCls = getPrefixCls('table', customizePrefixCls)
   const [wrapCSSVar] = useStyle(prefixCls)
+  const tableLocale: TableLocale = { ...contextLocal.Table }
   // ========================== Refs ===================================
   const rootRef = React.useRef<HTMLDivElement>(null)
   const tblRef = React.useRef<RcReference>(null)
@@ -113,7 +117,7 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
     return (record: RecordType) => record?.[rowKey as string]
   }, [rowKey])
 
-  const [getRecordByKey ] = useLazyKVMap(rawData, legacyChildrenColumnName, getRowKey)
+  const [getRecordByKey] = useLazyKVMap(rawData, legacyChildrenColumnName, getRowKey)
 
   const [transformSelectionColumns] = useSelection({
     prefixCls,
@@ -123,10 +127,19 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
     getRecordByKey
   }, rowSelection)
 
+  // ============================== filter ==============================
+  const [transformFilterColumns] = useFilter({ prefixCls, locale: tableLocale })
+
+
+  // ============================== sort ==============================
+
+  const [transformSorterColumns] = useFilterSorter({ prefixCls })
+
+
   // ============================== render ===============================
   const transformColumns = useCallback(innerColumns => {
-    return transformSelectionColumns(innerColumns)
-  }, [transformSelectionColumns])
+    return transformSelectionColumns(transformFilterColumns(transformSorterColumns(innerColumns)))
+  }, [transformSelectionColumns, transformFilterColumns, transformSorterColumns])
 
 
   // ============================== pagination ===============================

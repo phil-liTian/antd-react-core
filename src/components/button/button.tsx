@@ -17,7 +17,8 @@ export interface BaseButtonProps {
   children?: React.ReactNode;
   variant?: ButtonVariantType;
   color?: ButtonColorType
-  size?: SizeType
+  size?: SizeType,
+  loading?: boolean
 }
 
 export interface ButtonProps extends BaseButtonProps, MergedHTMLAttributes {
@@ -37,7 +38,7 @@ const ButtonTypeMap: Record<ButtonType, ColorVariantPairType> = {
 
 
 const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { prefixCls: customizePrefixCls, children, variant, color, type, size: customizeSize } = props
+  const { prefixCls: customizePrefixCls, children, variant, color, type, size: customizeSize, loading } = props
 
   const { getPrefixCls } = React.useContext(ConfigContext)
   const groupSize = React.useContext(GroupSizeContext)
@@ -54,7 +55,7 @@ const InternalCompoundButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   const [WrapCSSVar] = useStyle(prefixCls)
   const mergedType = type || 'default'
 
-  const iconNode = <LoadingIcon prefixCls={prefixCls} />
+  const iconNode = loading && <LoadingIcon prefixCls={prefixCls} />
 
   const [mergedColor, mergedVariant] = React.useMemo<ColorVariantPairType>(() => {
     if (color && variant) {

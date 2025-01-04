@@ -1,4 +1,5 @@
 import { Table, Typography } from 'antd';
+import { PTable } from '@c/index'
 import type { ColumnsType } from 'antd/table/index';
 import React from 'react';
 
@@ -125,7 +126,7 @@ const App: React.FC = () => (
       columns={fixedColumns}
       dataSource={fixedData}
       pagination={false}
-      scroll={{ x: 2000, y: 500 }}
+      scroll={{ x: 2000, y: 200 }}
       bordered
       summary={() => (
         <Table.Summary fixed>
@@ -135,6 +136,57 @@ const App: React.FC = () => (
           </Table.Summary.Row>
         </Table.Summary>
       )}
+    />
+
+    
+    <PTable
+      columns={fixedColumns}
+      dataSource={fixedData}
+      pagination={false}
+      scroll={{ x: 2000, y: 200 }}
+      bordered
+      summary={() => (
+        <PTable.Summary fixed>
+          <PTable.Summary.Row>
+            <PTable.Summary.Cell index={0}>Summary</PTable.Summary.Cell>
+            <PTable.Summary.Cell index={1}>This is a summary content</PTable.Summary.Cell>
+          </PTable.Summary.Row>
+        </PTable.Summary>
+      )}
+    />
+
+
+
+    <PTable
+      columns={columns}
+      dataSource={data}
+      pagination={false}
+      summary={pageData => {
+        let totalBorrow = 0;
+        let totalRepayment = 0;
+
+        pageData.forEach(({ borrow, repayment }) => {
+          totalBorrow += borrow;
+          totalRepayment += repayment;
+        });
+        return <>
+          <PTable.Summary.Row>
+            <PTable.Summary.Cell index={0}>Total</PTable.Summary.Cell>
+            <PTable.Summary.Cell index={1}>
+              <Text type="danger">{totalBorrow}</Text>
+            </PTable.Summary.Cell>
+            <PTable.Summary.Cell index={2}>
+              <Text>{totalRepayment}</Text>
+            </PTable.Summary.Cell>
+          </PTable.Summary.Row>
+          <PTable.Summary.Row>
+            <PTable.Summary.Cell index={0}>Balance</PTable.Summary.Cell>
+            <PTable.Summary.Cell index={1} colSpan={2}>
+              <Text type="danger">{totalBorrow - totalRepayment}</Text>
+            </PTable.Summary.Cell>
+          </PTable.Summary.Row>
+        </>
+      }}
     />
   </>
 );

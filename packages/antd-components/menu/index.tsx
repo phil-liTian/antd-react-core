@@ -27,8 +27,8 @@ type ComponentProps = MenuProps & React.RefAttributes<MenuRef>;
 
 type GenericItemType<T = unknown> = T extends infer U extends MenuItemType
   ? unknown extends U
-    ? ItemType
-    : ItemType<U>
+  ? ItemType
+  : ItemType<U>
   : ItemType;
 
 type GenericComponentProps<T = unknown> = Omit<ComponentProps, 'items'> & {

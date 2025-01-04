@@ -11,6 +11,8 @@ import FilterSearch from './tableView/filter-search'
 import FilterInTree from './tableView/filter-in-tree'
 import Ellipsis from './tableView/ellipsis'
 import FixedColumns from './tableView/fixed-columns'
+import Expand from './tableView/expand'
+import Virtual from './tableView/virtual'
 
 
 const options = [
@@ -25,10 +27,12 @@ const options = [
   { label: 'FilterSearch', value: 'FilterSearch' },
   { label: 'FilterInTree', value: 'FilterInTree' },
   { label: 'fixed', value: 'FixedColumns' },
+  { label: 'Expand', value: 'Expand' },
+  { label: '虚拟列表', value: 'Virtual' },
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('Summary')
+  const [curSegmented, setCurSegmented] = React.useState('Expand')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,
@@ -41,16 +45,21 @@ const TableView: React.FC = () => {
     FilterSearch: <FilterSearch />,
     FilterInTree: <FilterInTree />,
     FixedColumns: <FixedColumns />,
+    Expand: <Expand />,
+    Virtual: <Virtual />
   }
 
   return <>
-    <Segmented value={curSegmented} options={options} onChange={setCurSegmented} />
+    <Segmented value={curSegmented} options={options.slice(0, 10)} onChange={setCurSegmented} />
+    <br />
+    <Segmented value={curSegmented} options={options.slice(10)} onChange={setCurSegmented} />
     <br />
     {curComponent[curSegmented]}
   </>
 }
 
 // todos: summary、fixed、filter
+// TODO: filter、sorter、expand、virtual
 
 
 export default TableView

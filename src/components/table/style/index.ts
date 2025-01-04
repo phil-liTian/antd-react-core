@@ -5,6 +5,9 @@ import { genPaginationStyle } from './pagination';
 import { genBorderedStyle } from './bordered';
 import { genEllipsisStyle } from './ellipsis';
 import { genSelectionStyle } from './selection';
+import { genFixedStyle } from './fixed';
+import { genFilterStyle } from './filter';
+import { genSorterStyle } from './sorter';
 
 export interface ComponentToken {
 	headerBg: string;
@@ -14,6 +17,7 @@ export interface ComponentToken {
 	footerBg: string;
 	footerColor: string;
 	headerIconColor: string;
+	filterDropdownMenuBg: string;
 }
 
 export interface TableToken {
@@ -25,6 +29,13 @@ export interface TableToken {
 	tableBorderColor: string;
 	tableFooterBg: string;
 	tableFooterTextColor: string;
+	zIndexTableFixed: number;
+	tableBg: string;
+	tableFilterDropdownBg: string;
+	tableHeaderFilterActiveBg: string;
+	tableFilterDropdownWidth: number;
+	tableFilterDropdownHeight: number;
+	tableFilterDropdownSearchWidth: number;
 }
 
 const genTableStyle = (token): CSSInterpolation => {
@@ -111,6 +122,7 @@ function prepareComponentToken(token) {
 		colorTextHeading,
 		colorIcon,
 		opacityLoading = 1,
+		colorFillContent,
 	} = token;
 
 	const colorFillAlterSolid = new TinyColor(colorFillAlter)
@@ -128,10 +140,13 @@ function prepareComponentToken(token) {
 		borderColor: colorBorderSecondary,
 		footerBg: colorFillAlterSolid,
 		footerColor: colorTextHeading,
+		filterDropdownBg: colorBgContainer,
 		headerIconColor: baseColorAction
 			.clone()
 			.setAlpha(baseColorAction.getAlpha() * opacityLoading)
 			.toRgbString(),
+		headerFilterHoverBg: colorFillContent,
+		filterDropdownMenuBg: colorBgContainer,
 	};
 }
 
@@ -146,6 +161,9 @@ export default genStyleHooks(
 			borderColor,
 			footerBg,
 			footerColor,
+			colorBgContainer,
+			filterDropdownBg,
+			headerFilterHoverBg,
 		} = token;
 
 		const tableToken = mergeToken<TableToken>(token, {
@@ -156,6 +174,14 @@ export default genStyleHooks(
 			tableBorderColor: borderColor,
 			tableFooterBg: footerBg,
 			tableFooterTextColor: footerColor,
+			zIndexTableFixed: 2,
+			tableBg: colorBgContainer,
+			tableFilterDropdownBg: filterDropdownBg,
+			tableHeaderFilterActiveBg: headerFilterHoverBg,
+			// filter
+			tableFilterDropdownWidth: 120,
+			tableFilterDropdownHeight: 264,
+			tableFilterDropdownSearchWidth: 140,
 		});
 
 		return [
@@ -173,6 +199,15 @@ export default genStyleHooks(
 
 			//selection
 			genSelectionStyle(tableToken),
+
+			// fixed
+			genFixedStyle(tableToken),
+
+			// filter
+			genFilterStyle(tableToken),
+
+			// sorter
+			genSorterStyle(tableToken),
 		];
 	},
 	prepareComponentToken

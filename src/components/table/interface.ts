@@ -91,6 +91,7 @@ export interface TablePaginationConfig extends PaginationProps {
 
 export interface TableLocale {
 	emptyText?: React.ReactNode | (() => React.ReactNode);
+	filterSearchPlaceholder?: string;
 }
 
 export type RowSelectMethod = 'all' | 'none' | 'invert' | 'single' | 'multiple';

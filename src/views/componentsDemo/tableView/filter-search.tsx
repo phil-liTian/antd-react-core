@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
+import { PTable } from '@c/index'
 
 interface DataType {
   key: React.Key;
@@ -88,7 +89,11 @@ const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter,
 };
 
 const App: React.FC = () => (
-  <Table<DataType> columns={columns} dataSource={data} onChange={onChange} />
+  <>
+    <Table<DataType> columns={columns} dataSource={data} onChange={onChange} />
+      
+    <PTable<DataType> columns={columns} dataSource={data} onChange={onChange} />
+  </>
 );
 
 export default App;
