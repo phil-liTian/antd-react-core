@@ -13,6 +13,7 @@ import Ellipsis from './tableView/ellipsis'
 import FixedColumns from './tableView/fixed-columns'
 import Expand from './tableView/expand'
 import Virtual from './tableView/virtual'
+import GroupingColumns from './tableView/grouping-columns'
 
 
 const options = [
@@ -29,10 +30,11 @@ const options = [
   { label: 'fixed', value: 'FixedColumns' },
   { label: 'Expand', value: 'Expand' },
   { label: '虚拟列表', value: 'Virtual' },
+  { label: '表头分组', value: 'GroupingColumns' }
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('Expand')
+  const [curSegmented, setCurSegmented] = React.useState('Virtual')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,
@@ -46,7 +48,8 @@ const TableView: React.FC = () => {
     FilterInTree: <FilterInTree />,
     FixedColumns: <FixedColumns />,
     Expand: <Expand />,
-    Virtual: <Virtual />
+    Virtual: <Virtual />,
+    GroupingColumns: <GroupingColumns />
   }
 
   return <>
@@ -60,6 +63,7 @@ const TableView: React.FC = () => {
 
 // todos: summary、fixed、filter
 // TODO: filter、sorter、expand、virtual
+// 表头分组，表格行列合并、拖拽排序、拖拽手柄列、嵌套子表格
 
 
 export default TableView

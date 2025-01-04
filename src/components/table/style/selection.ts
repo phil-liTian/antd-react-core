@@ -15,10 +15,11 @@ export const genSelectionStyle = (token): any => {
 			[`
         table tr th${componentCls}-selection-column,
         table tr td${componentCls}-selection-column,
+				${componentCls}-selection-column
       `]: {
-				// paddingInlineEnd: token.paddingXS,
-				// paddingInlineStart: token.paddingXS,
-				// textAlign: 'center',
+				paddingInlineEnd: token.paddingXS,
+				paddingInlineStart: token.paddingXS,
+				textAlign: 'center',
 			},
 
 			[`${componentCls}-selection`]: {

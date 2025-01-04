@@ -178,7 +178,11 @@ const App: React.FC = () => {
           />
 
           {data.length >= 999 && (
-            <Button onClick={() => tblRef.current?.scrollTo({ index: 999 })}>
+            <Button onClick={() => {
+              console.log('tblRef--->', tblRef.current);
+
+              tblRef.current?.scrollTo({ index: 999 })
+            }}>
               Scroll To index 999
             </Button>
           )}
@@ -203,7 +207,7 @@ const App: React.FC = () => {
           columns={mergedColumns}
           scroll={{ x: 2000, y: 400 }}
           rowKey="id"
-          dataSource={empty ? [] : data.slice(0, 10)}
+          dataSource={empty ? [] : data}
           pagination={false}
           ref={tblRef}
           rowSelection={expanded ? undefined : { type: 'radio', columnWidth: 48 }}

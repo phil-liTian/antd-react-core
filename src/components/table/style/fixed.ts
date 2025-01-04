@@ -1,17 +1,19 @@
-
-
-export const genFixedStyle = token => {
-  const {
+export const genFixedStyle = (token) => {
+	const {
 		componentCls,
 		zIndexTableFixed,
 		tableBg,
 		colorSplit,
 		motionDurationSlow,
 	} = token;
-  const shadowColor = colorSplit;
-  
-  return {
+	const shadowColor = colorSplit;
+
+	return {
 		[`${componentCls}-wrapper`]: {
+			[`${componentCls}-cell`]: {
+				boxSizing: 'border-box',
+			},
+
 			[`${componentCls}-cell-fix-left,
 				${componentCls}-cell-fix-right
 				`]: {
@@ -67,4 +69,4 @@ export const genFixedStyle = token => {
 			},
 		},
 	};
-}
+};

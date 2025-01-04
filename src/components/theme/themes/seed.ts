@@ -45,6 +45,7 @@ const seedToken: SeedToken = {
 	fontSize: 14,
 
 	controlHeight: 32,
+	colorLink: '',
 
 	// motion
 	motionUnit: 0.1,

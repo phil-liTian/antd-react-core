@@ -24,6 +24,8 @@ export interface SeedToken extends PresetColorType {
 
 	controlHeight: number;
 
+	colorLink: string;
+
 	// motion
 	motionUnit: number;
 	motionBase: number;

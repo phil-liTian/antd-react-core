@@ -8,6 +8,8 @@ import { genSelectionStyle } from './selection';
 import { genFixedStyle } from './fixed';
 import { genFilterStyle } from './filter';
 import { genSorterStyle } from './sorter';
+import { genExpandStyle } from './expand';
+import { genVirtualStyle } from './virtual';
 
 export interface ComponentToken {
 	headerBg: string;
@@ -18,6 +20,7 @@ export interface ComponentToken {
 	footerColor: string;
 	headerIconColor: string;
 	filterDropdownMenuBg: string;
+	expandIconSize: number;
 }
 
 export interface TableToken {
@@ -54,6 +57,7 @@ const genTableStyle = (token): CSSInterpolation => {
 	const tableBorder = `${lineWidth}px ${lineType} ${tableBorderColor}`;
 	return {
 		[`${componentCls}-wrapper`]: {
+			boxSizing: 'border-box',
 			maxWidth: '100%',
 			[componentCls]: {
 				fontSize: cellFontSize,
@@ -123,6 +127,8 @@ function prepareComponentToken(token) {
 		colorIcon,
 		opacityLoading = 1,
 		colorFillContent,
+		lineWidth,
+		controlInteractiveSize,
 	} = token;
 
 	const colorFillAlterSolid = new TinyColor(colorFillAlter)
@@ -130,6 +136,9 @@ function prepareComponentToken(token) {
 		.toHexShortString();
 
 	const baseColorAction = new TinyColor(colorIcon);
+
+	const expandIconHalfInner = controlInteractiveSize / 2 - lineWidth;
+	const expandIconSize = expandIconHalfInner * 2 + lineWidth * 3;
 
 	return {
 		cellPaddingBlock: padding,
@@ -147,6 +156,8 @@ function prepareComponentToken(token) {
 			.toRgbString(),
 		headerFilterHoverBg: colorFillContent,
 		filterDropdownMenuBg: colorBgContainer,
+		expandIconSize,
+		expandIconHalfInner,
 	};
 }
 
@@ -208,6 +219,12 @@ export default genStyleHooks(
 
 			// sorter
 			genSorterStyle(tableToken),
+
+			// expand
+			genExpandStyle(tableToken),
+
+			// virtual
+			genVirtualStyle(tableToken),
 		];
 	},
 	prepareComponentToken

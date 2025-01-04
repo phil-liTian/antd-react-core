@@ -26,6 +26,10 @@ export const genColorMapToken = (
 		colorTextBase
 	);
 
+	const colorLink = seed.colorLink || seed.colorInfo;
+	const linkColors = generateColorPalettes(colorLink);
+	console.log('linkColors', linkColors);
+
 	return {
 		...neutralColors,
 
@@ -90,7 +94,10 @@ export const genColorMapToken = (
 		colorWarningText: warningColors[9],
 		colorWarningTextActive: warningColors[10],
 
-
+		// link
+		colorLinkHover: linkColors[4],
+		colorLink: linkColors[6],
+		colorLinkActive: linkColors[7],
 
 		colorWhite: '#fff',
 	};

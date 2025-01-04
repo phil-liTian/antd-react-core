@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { TableColumnsType } from 'antd';
+import { PTable } from '@c/index'
 
 interface DataType {
   key: React.Key;
@@ -25,10 +26,10 @@ const columns: TableColumnsType<DataType> = [
 const data: DataType[] = [
   {
     key: 1,
-    name: 'John Brown',
+    name: 'phil',
     age: 32,
     address: 'New York No. 1 Lake Park',
-    description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
+    description: 'My name is phil, I am 28 years old, living in ShangHai No. 1 Lake Park.',
   },
   {
     key: 2,
@@ -54,14 +55,24 @@ const data: DataType[] = [
 ];
 
 const App: React.FC = () => (
-  <Table<DataType>
-    columns={columns}
-    expandable={{
-      expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
-      rowExpandable: (record) => record.name !== 'Not Expandable',
-    }}
-    dataSource={data}
-  />
+  <>
+    <Table<DataType>
+      columns={columns}
+      expandable={{
+        expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
+        rowExpandable: (record) => record.name !== 'Not Expandable',
+      }}
+      dataSource={data}
+    />
+
+    <PTable
+      expandable={{
+        rowExpandable: record => record.name !== 'Not Expandable',
+        expandedRowRender: (record) => <p style={{ margin: 0, color: 'red' }}>{record.description}</p>,
+      }}
+      columns={columns}
+      dataSource={data} />
+  </>
 );
 
 export default App;

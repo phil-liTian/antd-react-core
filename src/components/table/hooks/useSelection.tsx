@@ -13,6 +13,7 @@ export const SELECTION_ALL = 'SELECT_ALL' as const
 export const SELECTION_INVERT = 'SELECT_INVERT' as const
 export const SELECTION_NONE = 'SELECT_NONE' as const
 const EMPTY_LIST: React.Key[] = []
+export type FixedType = 'left' | 'right' | boolean
 
 
 export type INTERNAL_SELECTION_ITEM =
@@ -227,6 +228,8 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       }
     }
 
+    let mergedFixed: FixedType = 'left'
+
     const renderSelectionCell = (_, record, index) => {
       const { node } = renderCell(_, record, index)
       return node
@@ -245,6 +248,7 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
     }
 
     const selectionColumn = {
+      fixed: mergedFixed,
       title: renderColumnTitle(),
       width: selectionColWidth,
       className: `${prefixCls}-selection-column`,

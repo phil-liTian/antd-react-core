@@ -51,6 +51,9 @@ export default function formatToken(derivativeToken): AliasToken {
 
 		colorIcon: mergedToken.colorTextTertiary,
 
+		// checkbox & expand size
+		controlInteractiveSize: mergedToken.controlHeight / 2,
+
 		colorSplit: getAlphaColor(
 			mergedToken.colorBorderSecondary,
 			mergedToken.colorBgContainer

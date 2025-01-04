@@ -21,3 +21,26 @@ export const textEllipsis = {
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
 }
+
+
+export const operationUnit = (token: AliasToken) => {
+  const { colorLink, colorLinkHover, colorLinkActive } = token
+
+  return {
+    color: colorLink,
+    cursor: 'pointer',
+    border: 0,
+    padding: 0,
+
+    '&:focus, &:hover': {
+      color: colorLinkHover,
+    },
+    '&:active': {
+      color: colorLinkActive
+    }
+  }
+}
+
+
+
+

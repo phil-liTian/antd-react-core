@@ -1,9 +1,11 @@
 import { AnyObject } from '@c/_util/type'
 import { omit } from 'vc-util'
+import useProxyImperativeHandle from '../_util/hooks/useProxyImperativeHandle'
 import { TableProps as RcTableProps, Reference as RcReference, INTERNAL_HOOKS } from 'rc-table'
 import { ColumnsType, GetRowKey, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig, TableRowSelection } from './interface'
 import RcTable from './RcTable/index'
-import React, { useCallback } from 'react'
+import RcVirtualTable from './RcTable/virtualTable'
+import React, { useCallback, useImperativeHandle } from 'react'
 import { ConfigContext, SizeType } from '../config-provider'
 import classNames from 'classnames'
 import useStyle from './style'
@@ -48,12 +50,18 @@ export interface TableProps<RecordType = AnyObject> extends
   sortDirections?: SortOrder[]
   showSortTooltip?: boolean | SorterTooltipProps
 
+  // expand
+
   // virtual
   virtual?: boolean
 
 }
 
-const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TableProps, ref: React.MutableRefObject<HTMLDivElement>) => {
+export interface InternalTableProps<RecordType extends AnyObject> extends TableProps<RecordType> {
+  _renderTimes: number
+}
+
+const InternalTable = <RecordType extends AnyObject = AnyObject>(props: InternalTableProps<RecordType>, ref: React.MutableRefObject<HTMLDivElement>) => {
   const {
     prefixCls: customizePrefixCls,
     bordered,
@@ -64,7 +72,8 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
     locale,
     childrenColumnName: legacyChildrenColumnName = ' children',
     rowSelection,
-    rowKey = 'key'
+    rowKey = 'key',
+    virtual
   } = props
   const { direction, getPrefixCls, renderEmpty, locale: contextLocal = defaultLocal } = React.useContext<ConfigConsumerProps>(ConfigContext)
   const prefixCls = getPrefixCls('table', customizePrefixCls)
@@ -73,11 +82,16 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: TablePro
   // ========================== Refs ===================================
   const rootRef = React.useRef<HTMLDivElement>(null)
   const tblRef = React.useRef<RcReference>(null)
+  useProxyImperativeHandle(ref, () => ({
+    ...tblRef.current!,
+    nativeElement: rootRef.current!,
+  }))
+
 
   const wrapperClassNames = classNames(`${prefixCls}-wrapper`, rootClassName)
   const rawData = dataSource || []
 
-  const TableComponent = RcTable
+  const TableComponent = virtual ? RcVirtualTable : RcTable
 
   const mergedColumns = React.useMemo(() => {
     return props.columns
