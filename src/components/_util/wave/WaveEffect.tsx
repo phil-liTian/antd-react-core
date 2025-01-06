@@ -98,7 +98,7 @@ const showWaveEffect = (target, info) => {
   holder.style.top = '0px'
   target.insertBefore(holder, target.firstChild)
 
-  // react18 render函数已被启用
+  // react18 render函数已被弃用
   render(<WaveEffect {...info} target={target} />, holder)
 }
 

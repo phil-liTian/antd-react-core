@@ -14,6 +14,10 @@ import FixedColumns from './tableView/fixed-columns'
 import Expand from './tableView/expand'
 import Virtual from './tableView/virtual'
 import GroupingColumns from './tableView/grouping-columns'
+import ColspanRowspan from './tableView/colspan-rowspan'
+import DragSorting from './tableView/drag-sorting'
+import DragSortingHandler from './tableView/drag-sorting-handler'
+import NestedTable from './tableView/nested-table'
 
 
 const options = [
@@ -30,11 +34,15 @@ const options = [
   { label: 'fixed', value: 'FixedColumns' },
   { label: 'Expand', value: 'Expand' },
   { label: '虚拟列表', value: 'Virtual' },
-  { label: '表头分组', value: 'GroupingColumns' }
+  { label: '表头分组', value: 'GroupingColumns' },
+  { label: '表格行/列合并', value: 'ColspanRowspan' },
+  { label: '拖拽排序', value: 'DragSorting' },
+  { label: '拖拽手柄列', value: 'DragSortingHandler' },
+  { label: '嵌套表格', value: 'NestedTable' }
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('Virtual')
+  const [curSegmented, setCurSegmented] = React.useState('ColspanRowspan')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,
@@ -49,7 +57,11 @@ const TableView: React.FC = () => {
     FixedColumns: <FixedColumns />,
     Expand: <Expand />,
     Virtual: <Virtual />,
-    GroupingColumns: <GroupingColumns />
+    GroupingColumns: <GroupingColumns />,
+    ColspanRowspan: <ColspanRowspan />,
+    DragSorting: <DragSorting />,
+    DragSortingHandler: <DragSortingHandler />,
+    NestedTable: <NestedTable />
   }
 
   return <>
