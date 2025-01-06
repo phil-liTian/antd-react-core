@@ -1,5 +1,10 @@
 import React from 'react';
-import { GetRowKey } from 'rc-table/lib/interface';
+import { CheckboxProps } from 'antd';
+import {
+	GetRowKey,
+	type GetComponentProps,
+	ColumnType as RcColumnType,
+} from 'rc-table/lib/interface';
 import { AnyObject } from '../_util/type';
 import { PaginationProps } from '../pagination';
 import { TooltipProps } from '../tooltip';
@@ -46,7 +51,8 @@ export type ColumnTitle<RecordType = AnyObject> =
 	| React.ReactNode
 	| ((props: ColumnTitleProps<RecordType>) => React.ReactNode);
 
-export interface ColumnType<RecordType = AnyObject> {
+export interface ColumnType<RecordType = AnyObject>
+	extends Omit<RcColumnType<RecordType>, 'title'> {
 	title?: ColumnTitle<RecordType>;
 
 	// ========================== sorter ==========================
@@ -92,6 +98,9 @@ export interface TablePaginationConfig extends PaginationProps {
 export interface TableLocale {
 	emptyText?: React.ReactNode | (() => React.ReactNode);
 	filterSearchPlaceholder?: string;
+	triggerDesc?: string;
+	triggerAsc?: string;
+	cancelSort?: string;
 }
 
 export type RowSelectMethod = 'all' | 'none' | 'invert' | 'single' | 'multiple';
@@ -113,13 +122,25 @@ export interface TableRowSelection<T = AnyObject> {
 	type?: RowSelectionType;
 	selectedRowKeys?: Key[];
 	defaultSelectedRowKeys?: Key[];
-	columnTitle?: React.ReactNode | (() => React.ReactNode);
+	columnTitle?:
+		| React.ReactNode
+		| ((checkboxNode: React.ReactNode) => React.ReactNode);
 	hideSelectAll?: boolean;
 	checkStrictly?: boolean; // 父子状态下节点选择是否完全受控
 	columnWidth?: string | number;
 	selections?: true | SelectionItem[];
-
+	fixed?: boolean | 'left' | 'right';
+	getCheckboxProps?: (
+		record: T
+	) => Partial<Omit<CheckboxProps, 'checked' | 'defaultChecked'>>;
 	onSelect?: SelectionSelectFn<T>;
+	onCell?: GetComponentProps<T>;
+	renderCell?: (
+		value: boolean,
+		record: T,
+		index: number,
+		originNode: React.ReactNode
+	) => React.ReactNode;
 	onChange?: (
 		selectedRowKeys: Key[],
 		selectedRows: T[],

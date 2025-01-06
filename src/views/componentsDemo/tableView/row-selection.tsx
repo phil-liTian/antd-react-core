@@ -53,8 +53,6 @@ const data: DataType[] = [
   },
 ];
 
-
-
 const App: React.FC = () => {
   const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('checkbox');
   const [selectedRowKeys, setSelections] = useState<React.Key[]>([])
@@ -63,6 +61,13 @@ const App: React.FC = () => {
   const rowSelection: TableProps<DataType>['rowSelection'] = {
     selectedRowKeys,
     onChange: setSelections,
+    columnWidth: 200,
+    columnTitle:  (checkBoxNode) => {
+      return <div>123 {checkBoxNode}</div>
+    },
+    // onCell: () => {
+    //   return { colSpan: 2 }
+    // },
     selections: [
       Table.SELECTION_ALL,
       Table.SELECTION_INVERT,
@@ -71,7 +76,6 @@ const App: React.FC = () => {
         key: 'odd',
         text: 'Select Odd Row',
         onSelect: (changeableRowKeys: React.Key[]) => {
-
           let newSelectedRowKeys: React.Key[] = changeableRowKeys.filter((_, index) => {
             return index % 2 === 0;
           });
@@ -86,6 +90,9 @@ const App: React.FC = () => {
     }),
     onSelect(e) {
       console.log('e---->', e);
+    },
+    renderCell: (value: boolean, record: DataType, index: number, originNode) => {
+      return <div>{record.name}{originNode}</div>
     }
   };
 

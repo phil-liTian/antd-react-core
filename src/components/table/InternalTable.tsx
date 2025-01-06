@@ -4,8 +4,8 @@ import useProxyImperativeHandle from '../_util/hooks/useProxyImperativeHandle'
 import { TableProps as RcTableProps, Reference as RcReference, INTERNAL_HOOKS } from 'rc-table'
 import { ColumnsType, GetRowKey, SorterTooltipProps, SortOrder, TableLocale, TablePaginationConfig, TableRowSelection } from './interface'
 import RcTable from './RcTable/index'
-import RcVirtualTable from './RcTable/virtualTable'
-import React, { useCallback, useImperativeHandle } from 'react'
+import RcVirtualTable from './RcTable/VirtualTable'
+import React, { useCallback } from 'react'
 import { ConfigContext, SizeType } from '../config-provider'
 import classNames from 'classnames'
 import useStyle from './style'
@@ -18,14 +18,14 @@ import useSelection from './hooks/useSelection'
 import { useLazyKVMap } from './hooks/useLazyKVMap'
 import { useFilter } from './hooks/useFilter'
 import defaultLocal from '../locale/zh_CN'
-import useFilterSorter from './hooks/useSorter'
+import useFilterSorter, { getSortData } from './hooks/useSorter'
 
 // export type RefInternalTable = <RecordType = AnyObject>(props) => React.ReactElement
 
 export interface TableProps<RecordType = AnyObject> extends
   Omit<RcTableProps<RecordType>, 'data' | 'columns' | 'emptyText' | 'transformColumns'> {
   prefixCls?: string
-  columns?: ColumnsType<RecordType>
+  columns: ColumnsType<RecordType>
   dataSource?: RcTableProps['data']
   // pagination
   pagination?: false | TablePaginationConfig
@@ -48,7 +48,7 @@ export interface TableProps<RecordType = AnyObject> extends
 
   // sort
   sortDirections?: SortOrder[]
-  showSortTooltip?: boolean | SorterTooltipProps
+  showSorterTooltip?: boolean | SorterTooltipProps
 
   // expand
 
@@ -73,7 +73,9 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
     childrenColumnName: legacyChildrenColumnName = ' children',
     rowSelection,
     rowKey = 'key',
-    virtual
+    virtual,
+    showSorterTooltip = { target: 'full-header' },
+    sortDirections
   } = props
   const { direction, getPrefixCls, renderEmpty, locale: contextLocal = defaultLocal } = React.useContext<ConfigConsumerProps>(ConfigContext)
   const prefixCls = getPrefixCls('table', customizePrefixCls)
@@ -97,12 +99,16 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
     return props.columns
   }, [props.columns])
 
-  const pageData = React.useMemo<RecordType[]>(() => {
-    return rawData as unknown as RecordType[]
-  }, [rawData])
+  const sortedData = React.useMemo(() => getSortData(rawData), [rawData])
 
   // TODO: Filter
-  const mergedData = pageData
+  const mergedData = sortedData
+
+
+  const pageData = React.useMemo<RecordType[]>(() => {
+    return mergedData as unknown as RecordType[]
+  }, [mergedData])
+
 
 
   // =========================== Empty ==============================
@@ -122,7 +128,6 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
   }
 
   // =============================== row selection ===============================
-
   const getRowKey = React.useMemo<GetRowKey<RecordType>>(() => {
     if (typeof rowKey === 'function') {
       return rowKey
@@ -147,7 +152,13 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
 
   // ============================== sort ==============================
 
-  const [transformSorterColumns] = useFilterSorter({ prefixCls })
+  const [transformSorterColumns] = useFilterSorter({
+    mergedColumns,
+    prefixCls,
+    showSorterTooltip,
+    tableLocale,
+    sortDirections: sortDirections || ['ascend', 'descend']
+  })
 
 
   // ============================== render ===============================

@@ -8,6 +8,7 @@ interface DataType {
   name: string;
   age: number;
   address: string;
+  height: number
 }
 
 const columns: TableColumnsType<DataType> = [
@@ -36,7 +37,18 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Age',
     dataIndex: 'age',
-    sorter: (a, b) => a.age - b.age,
+    sorter: {
+      compare: (a, b) => a.age - b.age,
+      multiple: 3
+    },
+  },
+  {
+    title: 'Height',
+    dataIndex: 'height',
+    sorter: {
+      compare: (a, b) => a.height - b.height,
+      multiple: 2
+    },
   },
   {
     title: 'Address',
@@ -62,24 +74,28 @@ const data: DataType[] = [
     key: '1',
     name: 'John Brown',
     age: 32,
+    height: 170,
     address: 'New York No. 1 Lake Park',
   },
   {
     key: '2',
     name: 'Jim Green',
     age: 42,
+    height: 160,
     address: 'London No. 1 Lake Park',
   },
   {
     key: '3',
     name: 'Joe Black',
     age: 32,
+    height: 171,
     address: 'Sydney No. 1 Lake Park',
   },
   {
     key: '4',
     name: 'Jim Red',
     age: 32,
+    height: 172,
     address: 'London No. 2 Lake Park',
   },
 ];
@@ -90,8 +106,8 @@ const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter,
 
 const App: React.FC = () => (
   <>
-    <Table<DataType> columns={columns} dataSource={data} onChange={onChange} />
-      
+    <Table<DataType> showSorterTooltip={{ title: '123' }} columns={columns} dataSource={data} onChange={onChange} />
+
     <PTable<DataType> columns={columns} dataSource={data} onChange={onChange} />
   </>
 );

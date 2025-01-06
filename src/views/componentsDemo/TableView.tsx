@@ -42,7 +42,7 @@ const options = [
 ]
 
 const TableView: React.FC = () => {
-  const [curSegmented, setCurSegmented] = React.useState('ColspanRowspan')
+  const [curSegmented, setCurSegmented] = React.useState('FilterSearch')
   const curComponent = {
     Basic: <Basic />,
     Pagination: < Pagintion />,

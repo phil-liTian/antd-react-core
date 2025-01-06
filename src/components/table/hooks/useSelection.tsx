@@ -1,12 +1,11 @@
 import { AnyObject } from "@/components/_util/type"
-import { Dropdown } from 'antd/index'
+import { Checkbox, Radio, Dropdown } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { useMergedState } from 'vc-util'
+import { ColumnType } from "rc-table"
 import { ColumnsType, GetRowKey, Key, RowSelectMethod, SelectionItem, TableRowSelection, TransformColumns } from "../interface"
 import React, { useCallback, useMemo } from "react"
-import { ColumnType } from "rc-table"
-import { conductCheck } from 'rc-tree/es/utils/conductUtil'
-import { Checkbox, Radio } from 'antd'
+import { CheckboxProps } from 'antd/checkbox/index'
 
 export const SELECTION_COLUMN = {} as const
 export const SELECTION_ALL = 'SELECT_ALL' as const
@@ -46,6 +45,9 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
     onSelect,
     onChange: onSelectionChange,
     selections,
+    getCheckboxProps,
+    fixed,
+    renderCell: customizeRenderCell,
   } = rowSelection || {}
 
   const flattedData = useMemo(() => {
@@ -58,6 +60,19 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       value: selectedRowKeys
     }
   )
+
+  // 处理checkbox的属性
+  const checkboxPropsMap = useMemo(() => {
+    const map = new Map<Key, Partial<CheckboxProps>>()
+
+    flattedData.forEach((record, index) => {
+      const key = getRowKey(record, index)
+      const checkboxProps = (getCheckboxProps ? getCheckboxProps(record) : null) || {}
+      map.set(key, checkboxProps)
+    })
+
+    return map
+  }, [getCheckboxProps, getRowKey])
 
   const setSelectedKeys = useCallback((keys: Key[], method: RowSelectMethod) => {
     let availableKeys: Key[] = keys;
@@ -98,7 +113,6 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
 
     const selectionList = selections === true ? [SELECTION_ALL, SELECTION_INVERT, SELECTION_NONE] : selections;
 
-
     return selectionList!.map((selection: INTERNAL_SELECTION_ITEM) => {
       if (selection === SELECTION_ALL) {
         return {
@@ -113,7 +127,6 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
           key: 'invert',
           text: '反选',
           onSelect() {
-
             setSelectedKeys(flattedData.map(getRowKey).filter(v => !derivedSelectedKeySet.has(v)), 'single')
           }
         }
@@ -149,8 +162,9 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
 
     // ================== all ======================
     // 全选按钮 选中状态
-    const recordKeys = flattedData.map(getRowKey)
+    const recordKeys = flattedData.map(getRowKey).filter(key => !checkboxPropsMap.get(key)!.disabled)
     const checkedCurrentAll = recordKeys.every(key => keySet.has(key))
+    const checkedCurrentSome = recordKeys.some(key => keySet.has(key))
     const onSelectAllChange = () => {
       setSelectedKeys(checkedCurrentAll ? [] : recordKeys, 'single')
     }
@@ -197,9 +211,20 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
         </div>
       }
 
+
+      const allDisabledData = flattedData.map((record, index) => {
+        const key = getRowKey(record, index)
+        const checkboxProps = checkboxPropsMap.get(key) || {}
+        return ({ ...checkboxProps })
+      }).filter(({ disabled }) => disabled)
+
+      const allDisabled = !!allDisabledData.length && allDisabledData.length === flattedData.length
+
       // checkbox 可全选
       columnTitleCheckbox = <Checkbox
         checked={checkedCurrentAll}
+        disabled={allDisabled || flattedData.length === 0}
+        indeterminate={checkedCurrentSome && !checkedCurrentAll}
         onChange={onSelectAllChange}
       />
 
@@ -211,11 +236,11 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       renderCell = (_, record, index) => {
         const key = getRowKey(record, index)
         const checked = keySet.has(key)
-        console.log('checked', keySet);
-
+        const checkboxProps = checkboxPropsMap.get(key) || {}
 
         return {
           node: <Checkbox
+            {...checkboxProps}
             checked={checked}
             onChange={event => {
               const { nativeEvent } = event
@@ -228,10 +253,27 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       }
     }
 
-    let mergedFixed: FixedType = 'left'
+    const selectionColumnIndex = cloneColumns.findIndex(v => v === SELECTION_COLUMN)
+
+    const prevCol: Record<string, any> = cloneColumns[selectionColumnIndex - 1]
+    const nextCol: Record<string, any> = cloneColumns[selectionColumnIndex + 1]
+
+    let mergedFixed: FixedType | undefined = fixed
+    if (mergedFixed === undefined) {
+      if (prevCol?.fixed != undefined) {
+        mergedFixed = prevCol.fixed
+      } else if (nextCol?.fixed != undefined) {
+        mergedFixed = nextCol.fixed
+      }
+    }
 
     const renderSelectionCell = (_, record, index) => {
-      const { node } = renderCell(_, record, index)
+      const { node, checked } = renderCell(_, record, index)
+
+      // 可自定义renderCell
+      if (customizeRenderCell) {
+        return customizeRenderCell(checked, record, index, node)
+      }
       return node
     }
 
@@ -239,9 +281,14 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       cloneColumns = [SELECTION_COLUMN, ...cloneColumns]
     }
 
+    // 可自定义title
     const renderColumnTitle = () => {
       if (!rowSelection?.columnTitle) {
         return title
+      }
+
+      if (typeof rowSelection.columnTitle === 'function') {
+        return rowSelection.columnTitle(columnTitleCheckbox)
       }
 
       return rowSelection.columnTitle
@@ -253,15 +300,18 @@ const useSelection = <RecordType extends AnyObject = AnyObject>(
       width: selectionColWidth,
       className: `${prefixCls}-selection-column`,
       render: renderSelectionCell,
+      onCell: rowSelection.onCell,
     } as ColumnType<RecordType>
 
     return cloneColumns.map(col => (col === SELECTION_COLUMN ? selectionColumn : col))
+
   }, [
     rowSelection,
     selectionColWidth,
     derivedSelectedKeySet,
     triggerSingleSelection,
-    selectedRowKeys
+    selectedRowKeys,
+    checkboxPropsMap
   ])
 
   return [transformColumns, derivedSelectedKeySet]

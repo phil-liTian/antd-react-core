@@ -9,7 +9,10 @@ interface MapCache<RecordType = AnyObject> {
 }
 
 
-export const useLazyKVMap = <RecordType extends AnyObject = AnyObject>(data: readonly RecordType[], childrenColumnName: string, getRowKey: GetRowKey<RecordType>) => {
+export const useLazyKVMap = <RecordType extends AnyObject = AnyObject>(
+  data: readonly RecordType[],
+  childrenColumnName: string,
+  getRowKey: GetRowKey<RecordType>) => {
 
   const mapCacheRef = React.useRef<MapCache<RecordType>>({})
 

@@ -1,6 +1,5 @@
 export const genSorterStyle = (token) => {
-	const { componentCls, headerIconColor, fontSizeIcon } = token;
-	console.log('componentCls', componentCls);
+	const { componentCls, headerIconColor, fontSizeIcon, colorPrimary } = token;
 
 	return {
 		[`${componentCls}-wrapper`]: {
@@ -19,6 +18,9 @@ export const genSorterStyle = (token) => {
 
 					'&-up, &-down': {
 						fontSize: fontSizeIcon,
+						'&.active': {
+							color: colorPrimary,
+						},
 					},
 				},
 			},

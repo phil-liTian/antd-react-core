@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { InputNumber, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
+import { PTable } from '@c/index'
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
@@ -80,6 +81,14 @@ const App: React.FC = () => {
         dataSource={data}
         pagination={false}
       />
+
+
+
+      <PTable 
+        rowSelection={rowSelection}
+        columns={columns}
+        dataSource={data}
+        pagination={false} />
     </>
   );
 };

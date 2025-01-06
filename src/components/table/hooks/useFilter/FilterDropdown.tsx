@@ -116,6 +116,7 @@ export const FilterDropdown = <RecordType extends AnyObject = AnyObject>(props: 
 
   const mergedDropdownprops = extendsObject<DropDownProps>({
     children: getDropdownTrigger(),
+    placement: 'bottomRight'
     // open: true
   }, {
     dropdownRender: () => {
