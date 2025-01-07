@@ -49,7 +49,11 @@ export const FilterDropdown = <RecordType extends AnyObject = AnyObject>(props: 
     })
   }
 
-  const [searchValue] = React.useState('')
+  const [searchValue, setSearchValue] = React.useState('')
+  const onSearch = (e) => {
+    setSearchValue(e.target.value)
+  }
+
   let filtered = false
   let dropdownContent: React.ReactNode
   if (typeof column.filterDropdown === 'function') {
@@ -65,7 +69,8 @@ export const FilterDropdown = <RecordType extends AnyObject = AnyObject>(props: 
           <FilterSearch
             locale={locale}
             tablePrefixCls={tablePrefixCls}
-            value={searchValue} />
+            value={searchValue}
+            onChange={onSearch} />
           <div className={`${tablePrefixCls}-filter-dropdown-tree`}>
             {
               filterMultiple ? <Checkbox>全选</Checkbox> : null
@@ -81,7 +86,9 @@ export const FilterDropdown = <RecordType extends AnyObject = AnyObject>(props: 
         <FilterSearch
           locale={locale}
           tablePrefixCls={tablePrefixCls}
-          value={searchValue} />
+          value={searchValue}
+          onChange={onSearch} />
+          
         <Menu items={items} />
       </>
     }

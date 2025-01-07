@@ -28,11 +28,21 @@ const nextSortDirection = (sortDirections: SortOrder[], current: SortOrder | nul
   return sortDirections[sortDirections.indexOf(current) + 1];
 }
 
+const getSortFunction = <RecordType extends AnyObject = AnyObject>(sorter: ColumnType<RecordType>['sorter']) => {
+  if (typeof sorter === 'function') {
+    return sorter
+  } else if (sorter && typeof sorter === 'object' && 'compare' in sorter) {
+    return sorter.compare
+  }
+  return false
+}
+
 
 export interface SortState<RecordType extends AnyObject = AnyObject> {
   column: ColumnType<RecordType>
   key: Key,
   sortOrder: SortOrder | null
+  // multiplePriority: number | boolean
 }
 
 const collectionSortStates = <RecordType extends AnyObject>(columns: ColumnsType<RecordType>, init: boolean, pos?: string): SortState<RecordType>[] => {
@@ -43,13 +53,33 @@ const collectionSortStates = <RecordType extends AnyObject>(columns: ColumnsType
 }
 
 // 获取排序后的数据
-export const getSortData = <RecordType extends AnyObject = AnyObject>(data: readonly RecordType[]) => {
+export const getSortData = <RecordType extends AnyObject = AnyObject>(data: readonly RecordType[], sortStates: SortState<RecordType>[]) => {
+  const innerSorterStates = sortStates.slice()
   const cloneData = data.slice()
 
-  return cloneData.sort((a, b) => a.age - b.age)
+  const runningSorters = innerSorterStates.filter(
+    ({ column: { sorter }, sortOrder }) => getSortFunction<RecordType>(sorter) && sortOrder,
+  );
+
+  if ( !runningSorters.length ) return cloneData
+
+  return cloneData.sort((record1, record2) => {
+    for (let i = 0; i < runningSorters.length; i += 1) {
+      const sortState = runningSorters[i];
+      const { column: { sorter }, sortOrder } = sortState
+      const compareFn = getSortFunction<RecordType>(sorter);
+      if ( compareFn && sortOrder ) {
+        const compareResult = compareFn(record1, record2, sortOrder)
+
+        if ( compareResult !== 0 ) {
+          return sortOrder === ASCEND ? compareResult : -compareResult
+        }
+      }
+    }
+
+    return 0
+  })
 }
-
-
 
 function injectSorter<RecordType extends AnyObject = AnyObject>(
   prefixCls: string,
@@ -63,7 +93,6 @@ function injectSorter<RecordType extends AnyObject = AnyObject>(
     const columnPos = getColumnPos(index, pos)
     let newColumn: ColumnType<RecordType> = column;
     if (newColumn.sorter) {
-
       const sortDirections = newColumn.sortDirections || defaultSortDirections
       const showSorterTooltip = newColumn.showSorterTooltip === undefined ? tableShowSorterTooltip : newColumn.showSorterTooltip
       const columnKey = getColumnKey(newColumn, columnPos)
@@ -185,7 +214,7 @@ const useFilterSorter = <RecordType extends AnyObject = AnyObject>(props: Sorter
       showSorterTooltip)
   }
 
-  return [transformColumns] as const
+  return [transformColumns, sortStates] as const
 }
 
 

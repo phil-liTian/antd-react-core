@@ -89,7 +89,6 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
     nativeElement: rootRef.current!,
   }))
 
-
   const wrapperClassNames = classNames(`${prefixCls}-wrapper`, rootClassName)
   const rawData = dataSource || []
 
@@ -99,16 +98,24 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
     return props.columns
   }, [props.columns])
 
-  const sortedData = React.useMemo(() => getSortData(rawData), [rawData])
+  // ============================== sort ==============================
+
+  const [transformSorterColumns, sortStates] = useFilterSorter({
+    mergedColumns,
+    prefixCls,
+    showSorterTooltip,
+    tableLocale,
+    sortDirections: sortDirections || ['ascend', 'descend']
+  })
+
+  const sortedData = React.useMemo(() => getSortData(rawData, sortStates), [rawData, sortStates])
 
   // TODO: Filter
   const mergedData = sortedData
 
-
   const pageData = React.useMemo<RecordType[]>(() => {
     return mergedData as unknown as RecordType[]
   }, [mergedData])
-
 
 
   // =========================== Empty ==============================
@@ -150,15 +157,7 @@ const InternalTable = <RecordType extends AnyObject = AnyObject>(props: Internal
   const [transformFilterColumns] = useFilter({ prefixCls, locale: tableLocale })
 
 
-  // ============================== sort ==============================
 
-  const [transformSorterColumns] = useFilterSorter({
-    mergedColumns,
-    prefixCls,
-    showSorterTooltip,
-    tableLocale,
-    sortDirections: sortDirections || ['ascend', 'descend']
-  })
 
 
   // ============================== render ===============================

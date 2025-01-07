@@ -56,7 +56,10 @@ export interface ColumnType<RecordType = AnyObject>
 	title?: ColumnTitle<RecordType>;
 
 	// ========================== sorter ==========================
-	sorter?: boolean | CompareFn<RecordType>;
+	sorter?:
+		| boolean
+		| CompareFn<RecordType>
+		| { compare: CompareFn<RecordType>; multiple?: number };
 	sortOrder?: SortOrder;
 	defaultSortOrder?: SortOrder; // 默认的排序方式
 	sortDirections?: SortOrder[]; // 支持的排序方式
